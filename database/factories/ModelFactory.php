@@ -1,5 +1,6 @@
 <?php
 use Faker\Generator as Faker;
+use Illuminate\Support\Facades\Hash;
 
 $factory->define(App\Entities\Alternativas::class, function (Faker $faker) {
     return [
@@ -70,7 +71,7 @@ $factory->define(App\User::class, function (Faker $faker) {
     return [
         'name' => $faker->name(),
         'email' => $faker->freeEmail(),
-        'password' => '$10$zuQQAkG1W37/GdOPuvUu7Ow2d2E/hgGU.o1bloHMnMc6HAnMZnVfe', // senha 1 a 8
+        'password' => Hash::make('12345678'),
         'tipo' => $faker->randomElement($array = array ('Aluno','Professor'))
     ];
 });
