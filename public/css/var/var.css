@@ -1,0 +1,17 @@
+.valorEnvelope {
+    position: absolute;
+    margin-top: -36%;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    font-size: 160%;
+    color: black;
+}
+
+.nomeEnvelope {
+    position: absolute;
+    margin-top: -31%;
+    margin-left: 25.7%;
+    font-size: 170%;
+    color: black;
+}

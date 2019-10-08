@@ -20,7 +20,7 @@ class Alunos extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['user_id'];
+    protected $fillable = ['users_id'];
 
     public function instituicoes() {
         return $this->belongsToMany(Instituicoes::class, 'alunos_has_instituicoes', 'alunos_id', 'instituicoes_id');

@@ -20,7 +20,7 @@ class Professores extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['users_id', 'nome'];
+    protected $fillable = ['users_id'];
 
     public function user() {
         return $this->belongsTo(User::class, 'users_id');

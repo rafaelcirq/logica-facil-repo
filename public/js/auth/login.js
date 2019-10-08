@@ -1,9 +1,10 @@
-"use strict";
+// Class definition
 
 var Login = function() {
+    // Private functions
 
-    var validation = function() {
-        $("#kt-form").validate({
+    var validar = function() {
+        $("#save_form").validate({
             // define validation rules
             rules: {
                 //= Client Information(step 3)
@@ -21,40 +22,43 @@ var Login = function() {
             invalidHandler: function(event, validator) {
                 swal.fire({
                     "title": "",
-                    "text": "There are some errors in your submission. Please correct them.",
+                    "text": "Existem campos não preenchidos. Verifique-os e tente novamente.",
                     "type": "error",
                     "confirmButtonClass": "btn btn-secondary",
                     "onClose": function(e) {
                         console.log('on close event fired!');
                     }
                 });
-
                 event.preventDefault();
             },
 
             submitHandler: function(form) {
-                //form[0].submit(); // submit the form
-                swal.fire({
-                    "title": "",
-                    "text": "Form validation passed. All good!",
-                    "type": "success",
-                    "confirmButtonClass": "btn btn-secondary"
-                });
-
-                return false;
+                form.submit();
             }
         });
+    }
+
+    var handleLogin = function(form, formAction, formData) {
+        var request = $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: formAction,
+            type: 'POST',
+            contentType: 'application/json',
+            data: formData
+        });
+        console.log(request);
     }
 
     return {
         // public functions
         init: function() {
-            validation();
+            validar();
         }
     };
 }();
 
-// Class Initialization
 jQuery(document).ready(function() {
     Login.init();
 });
