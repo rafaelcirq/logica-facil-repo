@@ -72,9 +72,9 @@ class UsersController extends Controller
      */
     public function store(UserCreateRequest $request)
     {
+        dd("entrou");
         try {
             $data =  $request->all();
-            dd($data);
             $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
             $professor = $this->repository->create($data);
             $response = [

@@ -104,7 +104,8 @@ License: You must have a valid license purchased only from themeforest(the above
 				style="background-image: url(assets/media/bg/bg-3.jpg);">
 				<div class="kt-grid__item kt-grid__item--fluid kt-login__wrapper">
 					<div class="kt-login__container">
-						<div class="kt-login__logo">
+						<div class="kt-login__logo" style="margin-top: -10%;
+						margin-bottom: 20%;">
 							<a href="#">
 								<img src="imagens/logo-var.png" width="50%">
 							</a>
@@ -122,20 +123,11 @@ License: You must have a valid license purchased only from themeforest(the above
 
 							<form method="POST" id="save_form" class="kt-form" action="{{ route('login') }}">
 								@csrf
-								<div class="input-group">
-									{{-- <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off"> --}}
-									{{-- <input class="form-control" id="email" placeholder="Email" type="email" class="form-control" name="email" value="{{ old('email') }}"
-									autocomplete="email" autofocus> --}}
-									<input id="email" type="email"
-										class="form-control @error('email') is-invalid @enderror" name="email"
-										value="{{ old('email') }}" required autocomplete="email" placeholder="Email"
-										autofocus>
+								<div class="col-lg-12">
+									<input type="email" id="email" name="email" placeholder="Email" class="form-control" autofocus>
 								</div>
-								<div class="input-group">
-									{{-- <input class="form-control" type="password" placeholder="Password" name="password"> --}}
-									<input id="password" type="password"
-										class="form-control @error('password') is-invalid @enderror" name="password"
-										required autocomplete="current-password" placeholder="Senha">
+								<div class="col-lg-12">
+									<input type="password" id="password" name="password" placeholder="Senha" class="form-control" autofocus>
 								</div>
 								<div class="row kt-login__extra">
 									<div class="col">

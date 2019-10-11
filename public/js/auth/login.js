@@ -17,6 +17,15 @@ var Login = function() {
                     required: true
                 }
             },
+            messages: {
+                "email": {
+                    required: "Insira seu email.",
+                    email: "Insira um email válido."
+                },
+                "password": {
+                    required: "Insira sua senha."
+                }
+            },
 
             //display error alert on form submit  
             invalidHandler: function(event, validator) {
@@ -36,19 +45,6 @@ var Login = function() {
                 form.submit();
             }
         });
-    }
-
-    var handleLogin = function(form, formAction, formData) {
-        var request = $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: formAction,
-            type: 'POST',
-            contentType: 'application/json',
-            data: formData
-        });
-        console.log(request);
     }
 
     return {

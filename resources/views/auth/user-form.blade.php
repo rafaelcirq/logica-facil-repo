@@ -3,24 +3,24 @@
     {{-- <div class="input-group"> --}}
     {{-- <input class="form-control" type="text" placeholder="Fullname" name="fullname"> --}}
     {{-- </div> --}}
-    <div class="input-group">
+    <div class="col-lg-12">
         <input class="form-control" type="text" placeholder="Nome" name="name" autocomplete="off">
     </div>
-    <div class="input-group">
+    <div class="col-lg-12">
         <select class="form-control" aria-placeholder="Tipo" name="tipo">
             <option value="" disabled selected>Tipo</option>
             <option value="aluno">Aluno</option>
             <option value="professor">Professor</option>
         </select>
     </div>
-    <div class="input-group">
+    <div class="col-lg-12">
         <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off">
     </div>
-    <div class="input-group">
+    <div class="col-lg-12">
         <input class="form-control" type="password" placeholder="Senha" name="password">
     </div>
-    <div class="input-group">
-        <input class="form-control" type="password" placeholder="Confirmar Senha" name="rpassword">
+    <div class="col-lg-12">
+        <input class="form-control" type="password" placeholder="Confirmar Senha" name="checkPassword">
     </div>
     {{-- <div class="row kt-login__extra">
                 <div class="col kt-align-left">

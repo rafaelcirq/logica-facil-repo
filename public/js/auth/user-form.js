@@ -2,19 +2,51 @@
 
 var UserForm = function() {
     // Private functions
-    console.log('entrou');
+
     var validar = function() {
-        $("#user-form").validate({
+        var form = $("#user-form");
+        form.validate({
             // define validation rules
             rules: {
                 //= Client Information(step 3)
                 // Billing Information
                 name: {
                     required: true,
+                },
+                tipo: {
+                    required: true,
+                },
+                email: {
+                    required: true,
                     email: true
                 },
                 password: {
-                    required: true
+                    required: true,
+                    minlength: 8
+                },
+                checkPassword: {
+                    required: true,
+                    equalTo: "#password"
+                }
+            },
+            messages: {
+                "name": {
+                    required: "Insira seu nome.",
+                },
+                "tipo": {
+                    required: "Diga se você é um professor ou um aluno",
+                },
+                "email": {
+                    required: "Insira seu email.",
+                    email: "Insira um email válido."
+                },
+                "password": {
+                    required: "Escolha uma senha.",
+                    minlength: "Sua senha deve ter no mínimo 8 caracteres."
+                },
+                "checkPassword": {
+                    required: "Confirme a senha escolhida.",
+                    equalTo: "O conteúdo digitado não corresponde à senha escolhida."
                 }
             },
 
@@ -22,33 +54,21 @@ var UserForm = function() {
             invalidHandler: function(event, validator) {
                 swal.fire({
                     "title": "",
-                    "text": "Existem campos não preenchidos. Verifique-os e tente novamente.",
+                    "text": "Existem problemas em alguns campos. Verifique-os e tente novamente.",
                     "type": "error",
                     "confirmButtonClass": "btn btn-secondary",
                     "onClose": function(e) {
                         console.log('on close event fired!');
                     }
                 });
-                event.preventDefault();
             },
 
             submitHandler: function(form) {
+                event.preventDefault();
+                console.log(form);
                 form.submit();
             }
         });
-    }
-
-    var handleLogin = function(form, formAction, formData) {
-        var request = $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: formAction,
-            type: 'POST',
-            contentType: 'application/json',
-            data: formData
-        });
-        console.log(request);
     }
 
     return {
