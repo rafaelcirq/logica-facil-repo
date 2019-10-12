@@ -1,15 +1,12 @@
 // Class definition
 
 var UserForm = function() {
-    // Private functions
 
     var validar = function() {
         var form = $("#user-form");
         form.validate({
-            // define validation rules
+
             rules: {
-                //= Client Information(step 3)
-                // Billing Information
                 name: {
                     required: true,
                 },
@@ -50,23 +47,73 @@ var UserForm = function() {
                 }
             },
 
-            //display error alert on form submit  
             invalidHandler: function(event, validator) {
-                swal.fire({
-                    "title": "",
-                    "text": "Existem problemas em alguns campos. Verifique-os e tente novamente.",
-                    "type": "error",
-                    "confirmButtonClass": "btn btn-secondary",
-                    "onClose": function(e) {
-                        console.log('on close event fired!');
-                    }
-                });
+                // swal.fire({
+                //     "title": "",
+                //     "text": "Existem problemas em alguns campos. Verifique-os e tente novamente.",
+                //     "type": "error",
+                //     "confirmButtonClass": "btn btn-secondary",
+                //     "onClose": function(e) {
+
+                //     }
+                // });
+                // $(form).validate().resetForm();
             },
 
             submitHandler: function(form) {
-                event.preventDefault();
-                console.log(form);
-                form.submit();
+                var formAction = $(form).attr('action');
+                var formData = new FormData(form);
+                handleAjaxFormSubmit(form, formAction, formData);
+            }
+        });
+    }
+
+    var handleAjaxFormSubmit = function(form, formAction, formData) {
+        return $.ajax({
+            url: formAction,
+            type: 'POST',
+            dataType: "JSON",
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(response, status) {
+
+                // mApp.unblockPage();
+                var alert = $('#m_form_error_msg');
+
+                if (response.success) {
+                    alert.addClass('m--hide').hide();
+                    swal.fire({
+                        "title": "Sucesso!",
+                        "text": response.message,
+                        "type": "success",
+                        "confirmButtonClass": "btn btn-secondary",
+                        "onClose": function(e) {
+                            console.log('on close event fired!');
+                        }
+                    });
+                    if (!$("input[name='_method']").val()) {
+                        $(form).trigger('reset');
+                        $(form).validate().resetForm();
+                    }
+                } else {
+                    swal.fire({
+                        "title": "Erro!",
+                        "text": response.message,
+                        "type": "error",
+                        "confirmButtonClass": "btn btn-secondary",
+                        "onClose": function(e) {
+
+                        }
+                    });
+                }
+            },
+            error: function(xhr, desc, err) {
+                console.log(err);
             }
         });
     }

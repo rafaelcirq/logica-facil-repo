@@ -11,15 +11,17 @@
 |
  */
 
+Auth::routes();
+
+Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
+
 Route::get('/', function () {
     return view('auth.welcome');
 });
 
-Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
-
-Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::resource('users', 'UsersController');
 
 Route::group(['middleware' => ['auth']], function () {
 
@@ -40,8 +42,5 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('testes', 'TestesController');
 
     Route::resource('turmas', 'TurmasController');
-    Route::get('turmas/{id}/professor', 'TurmasController@getTurmasByProfessor');
-
-    Route::resource('users', 'UsersController');
 
 });

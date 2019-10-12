@@ -1,3 +1,9 @@
+@error('email')
+<div class="alert alert-danger invalid-feedback" role="alert">
+    <div class="alert-text">Existem problemas em alguns campos. Verifique-os e tente novamente..</div>
+</div>
+@enderror
+
 <form method="POST" class="kt-form" id="user-form" action="{{ route('users.store') }}">
     @csrf
     {{-- <div class="input-group"> --}}

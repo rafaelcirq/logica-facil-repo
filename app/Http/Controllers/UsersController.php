@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
+use Illuminate\Support\Facades\Hash;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\UserCreateRequest;
@@ -50,6 +51,7 @@ class UsersController extends Controller
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         $users = $this->repository->all();
+        dd($users);
 
         if (request()->wantsJson()) {
 
@@ -72,15 +74,15 @@ class UsersController extends Controller
      */
     public function store(UserCreateRequest $request)
     {
-        dd("entrou");
         try {
             $data =  $request->all();
             $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
-            $professor = $this->repository->create($data);
+            $data['password'] = Hash::make($data['password']);
+            $user = $this->repository->create($data);
             $response = [
                 'success' => true,
-                'message' => 'Professor cadastrado.',
-                'data'    => $professor->toArray(),
+                'message' => 'Usuário cadastrado.',
+                'data'    => $user->toArray(),
             ];
             if ($request->wantsJson()) {
                 return response()->json($response);
@@ -92,6 +94,7 @@ class UsersController extends Controller
             switch (get_class($e)) {
                 case ValidatorException::class:
                     $message = $e->getMessageBag();
+                    console.log($message);
                     break;
                 default:
                     $message = $e->getMessage();
