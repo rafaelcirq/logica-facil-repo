@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Illuminate\Support\Facades\Hash;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Prettus\Validator\Contracts\ValidatorInterface;
+use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
  * Class UsersController.
@@ -39,7 +38,7 @@ class UsersController extends Controller
     public function __construct(UserRepository $repository, UserValidator $validator)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
+        $this->validator = $validator;
     }
 
     /**
@@ -59,7 +58,7 @@ class UsersController extends Controller
                 'data' => $users,
             ]);
         }
-        
+
         return view('users.index', compact('users'));
     }
 
@@ -75,14 +74,14 @@ class UsersController extends Controller
     public function store(UserCreateRequest $request)
     {
         try {
-            $data =  $request->all();
+            $data = $request->all();
             $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
             $data['password'] = Hash::make($data['password']);
             $user = $this->repository->create($data);
             $response = [
                 'success' => true,
                 'message' => 'Usuário cadastrado.',
-                'data'    => $user->toArray(),
+                'data' => $user->toArray(),
             ];
             if ($request->wantsJson()) {
                 return response()->json($response);
@@ -94,7 +93,6 @@ class UsersController extends Controller
             switch (get_class($e)) {
                 case ValidatorException::class:
                     $message = $e->getMessageBag();
-                    console.log($message);
                     break;
                 default:
                     $message = $e->getMessage();
@@ -102,11 +100,12 @@ class UsersController extends Controller
             }
             $response = [
                 'success' => false,
-                'message' => $message,
+                'message' => $message->first(),
             ];
             if ($request->wantsJson()) {
                 return response()->json($response);
             }
+
             return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
@@ -141,9 +140,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        $user = $this->repository->find($id);
-
-        return view('users.edit', compact('user'));
+        return view('auth.user-edit');
     }
 
     /**
@@ -165,8 +162,8 @@ class UsersController extends Controller
             $user = $this->repository->update($request->all(), $id);
 
             $response = [
-                'message' => 'User updated.',
-                'data'    => $user->toArray(),
+                'message' => 'Usuário atualizado.',
+                'data' => $user->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -180,15 +177,14 @@ class UsersController extends Controller
             if ($request->wantsJson()) {
 
                 return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
+                    'error' => true,
+                    'message' => $e->getMessageBag()->first(),
                 ]);
             }
-
+            dd($response);
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

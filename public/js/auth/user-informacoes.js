@@ -1,9 +1,12 @@
-// Class definition
+var Informacoes = function() {
 
-var UserForm = function() {
+    var setTipo = function() {
+        var tipo = $('#tipo-user').val();
+        $('#tipo').val(tipo);
+    }
 
     var validar = function() {
-        var form = $("#user-form");
+        var form = $("#user_info_form");
         form.validate({
             rules: {
                 name: {
@@ -15,14 +18,6 @@ var UserForm = function() {
                 email: {
                     required: true,
                     email: true
-                },
-                password: {
-                    required: true,
-                    minlength: 8
-                },
-                checkPassword: {
-                    required: true,
-                    equalTo: "#password"
                 }
             },
             messages: {
@@ -35,22 +30,14 @@ var UserForm = function() {
                 "email": {
                     required: "Insira seu email.",
                     email: "Insira um email válido."
-                },
-                "password": {
-                    required: "Escolha uma senha.",
-                    minlength: "Sua senha deve ter no mínimo 8 caracteres."
-                },
-                "checkPassword": {
-                    required: "Confirme a senha escolhida.",
-                    equalTo: "O conteúdo digitado não corresponde à senha escolhida."
                 }
             },
             submitHandler: function(form) {
-                // $(form).submit();
-                KTApp.blockPage();
-                var formAction = $(form).attr('action');
-                var formData = new FormData(form);
-                handleAjaxFormSubmit(form, formAction, formData);
+                $(form).submit();
+                // KTApp.blockPage();
+                // var formAction = $(form).attr('action');
+                // var formData = new FormData(form);
+                // handleAjaxFormSubmit(form, formAction, formData);
             }
         });
     }
@@ -58,7 +45,7 @@ var UserForm = function() {
     var handleAjaxFormSubmit = function(form, formAction, formData) {
         return $.ajax({
             url: formAction,
-            type: 'POST',
+            type: 'PUT',
             dataType: "JSON",
             data: formData,
             cache: false,
@@ -73,7 +60,6 @@ var UserForm = function() {
                 var alert = $('#m_form_error_msg');
 
                 if (response.success) {
-                    // alert.addClass('m--hide').hide();
                     swal.fire({
                         "title": "Sucesso!",
                         "text": response.message,
@@ -106,13 +92,13 @@ var UserForm = function() {
     }
 
     return {
-        // public functions
         init: function() {
+            setTipo();
             validar();
         }
     };
 }();
 
 jQuery(document).ready(function() {
-    UserForm.init();
+    Informacoes.init();
 });

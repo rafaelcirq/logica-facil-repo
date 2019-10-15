@@ -51915,3 +51915,10 @@ body {
         margin-left: 0.5rem;
     }
 }
+
+
+/* CLASSES PERSONALIZADAS */
+
+.error {
+    color: red;
+}

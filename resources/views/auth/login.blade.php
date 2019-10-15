@@ -124,10 +124,10 @@ License: You must have a valid license purchased only from themeforest(the above
 							<form method="POST" id="save_form" class="kt-form" action="{{ route('login') }}">
 								@csrf
 								<div class="col-lg-12">
-									<input type="email" id="email" name="email" placeholder="Email" class="form-control" autofocus>
+									<input type="email" name="email" placeholder="Email" class="form-control" autofocus>
 								</div>
 								<div class="col-lg-12">
-									<input type="password" id="password" name="password" placeholder="Senha" class="form-control" autofocus>
+									<input type="password" name="password" placeholder="Senha" class="form-control" autofocus>
 								</div>
 								<div class="row kt-login__extra">
 									<div class="col">
@@ -220,6 +220,7 @@ License: You must have a valid license purchased only from themeforest(the above
 	<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.js"></script>
 	<script src="assets/plugins/general/sticky-js/dist/sticky.min.js" type="text/javascript"></script>
 	<script src="assets/js/scripts.bundle.js" type="text/javascript"></script>
+	<script src="assets/plugins/general/block-ui/jquery.blockUI.js" type="text/javascript"></script>
 
 	<!--begin::Page Scripts(used by this page) -->
 	<script src="assets/js/pages/custom/login/login-general.js" type="text/javascript"></script>

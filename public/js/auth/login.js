@@ -4,11 +4,9 @@ var Login = function() {
     // Private functions
 
     var validar = function() {
-        $("#save_form").validate({
-            // define validation rules
+        var form = $("#save_form");
+        form.validate({
             rules: {
-                //= Client Information(step 3)
-                // Billing Information
                 email: {
                     required: true,
                     email: true
@@ -26,21 +24,6 @@ var Login = function() {
                     required: "Insira sua senha."
                 }
             },
-
-            //display error alert on form submit  
-            invalidHandler: function(event, validator) {
-                swal.fire({
-                    "title": "",
-                    "text": "Existem campos não preenchidos. Verifique-os e tente novamente.",
-                    "type": "error",
-                    "confirmButtonClass": "btn btn-secondary",
-                    "onClose": function(e) {
-                        console.log('on close event fired!');
-                    }
-                });
-                event.preventDefault();
-            },
-
             submitHandler: function(form) {
                 form.submit();
             }
