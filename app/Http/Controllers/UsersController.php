@@ -7,7 +7,6 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -50,7 +49,6 @@ class UsersController extends Controller
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
         $users = $this->repository->all();
-        dd($users);
 
         if (request()->wantsJson()) {
 
@@ -156,33 +154,41 @@ class UsersController extends Controller
     public function update(UserUpdateRequest $request, $id)
     {
         try {
+            $data = $request->all();
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
+            $this->validator->with($data)->setId($id)->passesOrFail(ValidatorInterface::RULE_UPDATE);
+            // dd($this->validator->with($data)->passesOrFail($this->validator->updateRules()));
 
-            $user = $this->repository->update($request->all(), $id);
-
+            $user = $this->repository->update($data, $id);
             $response = [
+                'success' => true,
                 'message' => 'Usuário atualizado.',
                 'data' => $user->toArray(),
             ];
-
             if ($request->wantsJson()) {
-
+                return response()->json($response);
+            }
+            session()->flash('response', $response);
+            return redirect()->back();
+        } catch (\Exception $e) {
+            // If errors...
+            switch (get_class($e)) {
+                case ValidatorException::class:
+                    $message = $e->getMessageBag();
+                    break;
+                default:
+                    $message = $e->getMessage();
+                    break;
+            }
+            $response = [
+                'success' => false,
+                'message' => $message->first(),
+            ];
+            if ($request->wantsJson()) {
                 return response()->json($response);
             }
 
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error' => true,
-                    'message' => $e->getMessageBag()->first(),
-                ]);
-            }
-            dd($response);
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
 
@@ -206,5 +212,10 @@ class UsersController extends Controller
         }
 
         return redirect()->back()->with('message', 'User deleted.');
+    }
+
+    public function password(UserUpdateRequest $request)
+    {
+        dd($request->all());
     }
 }

@@ -33,11 +33,11 @@ var Informacoes = function() {
                 }
             },
             submitHandler: function(form) {
-                $(form).submit();
-                // KTApp.blockPage();
-                // var formAction = $(form).attr('action');
-                // var formData = new FormData(form);
-                // handleAjaxFormSubmit(form, formAction, formData);
+                // $(form).submit();
+                KTApp.blockPage();
+                var formAction = $(form).attr('action');
+                var formData = new FormData(form);
+                handleAjaxFormSubmit(form, formAction, formData);
             }
         });
     }
@@ -45,7 +45,7 @@ var Informacoes = function() {
     var handleAjaxFormSubmit = function(form, formAction, formData) {
         return $.ajax({
             url: formAction,
-            type: 'PUT',
+            type: 'POST',
             dataType: "JSON",
             data: formData,
             cache: false,
@@ -80,9 +80,11 @@ var Informacoes = function() {
                         "confirmButtonClass": "btn btn-secondary",
                         timer: 2300,
                         "onClose": function(e) {
-
+                            console.log('on close event fired!');
                         }
                     });
+
+                    event.preventDefault();
                 }
             },
             error: function(xhr, desc, err) {
@@ -93,8 +95,8 @@ var Informacoes = function() {
 
     return {
         init: function() {
-            setTipo();
             validar();
+            setTipo();
         }
     };
 }();

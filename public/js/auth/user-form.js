@@ -70,7 +70,7 @@ var UserForm = function() {
             success: function(response, status) {
 
                 KTApp.unblockPage();
-                var alert = $('#m_form_error_msg');
+                // var alert = $('#m_form_error_msg');
 
                 if (response.success) {
                     // alert.addClass('m--hide').hide();

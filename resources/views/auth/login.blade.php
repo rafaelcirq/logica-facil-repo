@@ -127,7 +127,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<input type="email" name="email" placeholder="Email" class="form-control" autofocus>
 								</div>
 								<div class="col-lg-12">
-									<input type="password" name="password" placeholder="Senha" class="form-control" autofocus>
+									<input type="password" name="password" placeholder="Senha" class="form-control">
 								</div>
 								<div class="row kt-login__extra">
 									<div class="col">
