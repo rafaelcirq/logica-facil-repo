@@ -15,13 +15,6 @@ class CreateTestesTable extends Migration
     {
         Schema::create('testes', function (Blueprint $table) {
             $table->increments('id');
-
-            $table->integer('alunos_id')->unsigned();
-            $table->foreign('alunos_id')
-            ->references('id')
-            ->on('alunos')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
             
             $table->integer('turmas_id')->unsigned();
             $table->foreign('turmas_id')
@@ -31,8 +24,6 @@ class CreateTestesTable extends Migration
             ->onDelete('cascade');
             
             $table->decimal('valor', 4, 2);
-
-            $table->decimal('nota', 4, 2);
 
             $table->timestamps();
         });

@@ -7,6 +7,7 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
@@ -157,9 +158,8 @@ class UsersController extends Controller
             $data = $request->all();
 
             $this->validator->with($data)->setId($id)->passesOrFail(ValidatorInterface::RULE_UPDATE);
-            // dd($this->validator->with($data)->passesOrFail($this->validator->updateRules()));
-
             $user = $this->repository->update($data, $id);
+
             $response = [
                 'success' => true,
                 'message' => 'Usuário atualizado.',
@@ -216,6 +216,57 @@ class UsersController extends Controller
 
     public function password(UserUpdateRequest $request)
     {
-        dd($request->all());
+        if (Hash::check($request['old_password'], Auth::user()->password)) {
+
+            try {
+                $data = $request->all();
+
+                $data['name'] = Auth::user()->name;
+                $data['email'] = Auth::user()->email;
+                $data['tipo'] = Auth::user()->tipo;
+                $data['password'] = Hash::make($data['password']);
+
+                $user = $this->repository->update($data, Auth::id());
+
+                $response = [
+                    'success' => true,
+                    'message' => 'Senha alterada.',
+                    'data' => $user->toArray(),
+                ];
+                if ($request->wantsJson()) {
+                    return response()->json($response);
+                }
+                session()->flash('response', $response);
+                return redirect()->back();
+            } catch (\Exception $e) {
+                // If errors...
+                switch (get_class($e)) {
+                    case ValidatorException::class:
+                        $message = $e->getMessageBag();
+                        break;
+                    default:
+                        $message = $e->getMessage();
+                        break;
+                }
+                $response = [
+                    'success' => false,
+                    'message' => $message->first(),
+                ];
+                if ($request->wantsJson()) {
+                    return response()->json($response);
+                }
+
+                return redirect()->back()->withErrors($response['message'])->withInput();
+            }
+
+        } else {
+            $response = [
+                'success' => false,
+                'message' => "Senha atual incorreta.",
+            ];
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+        }
     }
 }

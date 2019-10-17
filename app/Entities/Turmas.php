@@ -22,8 +22,10 @@ class Turmas extends Model implements Transformable
      */
     protected $fillable = ['instituicoes_id', 'professores_id', 'nome'];
 
+    protected $with = array('instituicao', 'alunos');
+
     public function alunos() {
-        return $this->hasMany(Alunos::class, 'turmas_has_alunos', 'turmas_id', 'alunos_id');
+        return $this->belongsToMany(Alunos::class, 'turmas_has_alunos');
     }
 
     public function instituicao() {

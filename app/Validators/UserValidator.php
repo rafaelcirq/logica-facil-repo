@@ -21,14 +21,14 @@ class UserValidator extends LaravelValidator
         ValidatorInterface::RULE_CREATE => [
             'name' => 'required|max:255',
             'email' => 'email|required|unique:users',
-            'password' => 'required',
+            'password' => 'required|min:8',
             'tipo' => 'required',
         ],
         ValidatorInterface::RULE_UPDATE => [
             'name' => 'required|max:255',
             'email' => 'email|required|unique:users',
             'tipo' => 'required',
-        ],
+        ]
     ];
 
     public $messages = [

@@ -44,7 +44,7 @@
                     <span class="kt-menu__link-icon">
                         <i class="flaticon2-open-text-book"></i>
                     </span>
-                    <span class="kt-menu__link-text">Turmas</span>
+                    <span class="kt-menu__link-text">Minhas Turmas</span>
                 </a>
             </li>
             {{-- <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">

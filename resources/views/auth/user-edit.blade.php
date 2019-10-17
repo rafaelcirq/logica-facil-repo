@@ -2,7 +2,7 @@
 
 @section('importar')
 <script src="{{ asset('js/auth/user-informacoes.js') }}"></script>
-{{-- <link href="{{ asset('css/var/var.css') }}" rel="stylesheet" type="text/css" /> --}}
+<script src="{{ asset('js/auth/user-alterar-senha.js') }}"></script>
 @endsection
 
 @section('titulo')

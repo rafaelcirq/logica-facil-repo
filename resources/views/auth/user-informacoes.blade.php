@@ -7,7 +7,7 @@
         <label class="form-control-label">
             Email:
         </label>
-        <input class="form-control" type="text" placeholder="Email" name="email" value="{{ Auth::user()->email }}">
+        <input class="form-control" type="text" placeholder="Email" name="email" value="{{ Auth::user()->email }}" autofocus>
     </div>
     <div class="col-lg-4 form-group-sub">
         <label class="form-control-label">

@@ -44,5 +44,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('password', 'UsersController@password')->name('users.password');
 
     Route::resource('turmas', 'TurmasController');
+    Route::get('turma/{turmaId}/alunos', 'TurmasController@getAlunosByTurma')->name('turmas.alunosByTurma');
 
 });

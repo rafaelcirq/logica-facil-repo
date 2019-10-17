@@ -23,7 +23,7 @@ class Testes extends Model implements Transformable
     protected $fillable = ['alunos_id', 'turmas_id', 'nota', 'valor'];
 
     public function aluno() {
-        return $this->belongsTo(Alunos::class, 'alunos_id');
+        return $this->belongsToMany(Alunos::class, 'alunos_has_testes');
     }
 
     public function turma() {

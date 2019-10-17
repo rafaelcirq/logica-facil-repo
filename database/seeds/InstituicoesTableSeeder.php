@@ -11,6 +11,14 @@ class InstituicoesTableSeeder extends Seeder
      */
     public function run()
     {
-        $instituicao = factory(\App\Entities\Instituicoes::class, 50)->create();
+        $instituicoes = factory(\App\Entities\Instituicoes::class, 50)->create();
+
+        App\Entities\Professores::All()->each(function ($professor) use ($instituicoes){
+            $professor->instituicoes()->saveMany($instituicoes);
+         });
+
+         App\Entities\Alunos::All()->each(function ($aluno) use ($instituicoes){
+            $aluno->instituicoes()->saveMany($instituicoes);
+         });
     }
 }

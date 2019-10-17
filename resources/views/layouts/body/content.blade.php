@@ -14,6 +14,7 @@
                 <div class="kt-portlet__body">
                     @yield('conteudo')
                 </div>
+                @yield('datatable')
             </div>
 
         </div>

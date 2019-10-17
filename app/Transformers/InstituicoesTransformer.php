@@ -40,4 +40,9 @@ class InstituicoesTransformer extends TransformerAbstract
     {
         return $this->collection($model->professores, new ProfessoresTransformer());
     }
+
+    public function includeTurmas(Instituicoes $model)
+    {
+        return $this->collection($model->turmas, new TurmasTransformer());
+    }
 }

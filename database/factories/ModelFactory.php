@@ -52,9 +52,7 @@ $factory->define(App\Entities\Sessions::class, function (Faker $faker) {
 
 $factory->define(App\Entities\Testes::class, function (Faker $faker) {
     return [
-        'alunos_id' => $faker->numberBetween($min = 1, $max = 50),
         'turmas_id' => $faker->numberBetween($min = 1, $max = 50),
-        'nota' => $faker->randomFloat($nbMaxDecimals = 2, $min = 0, $max = 10),
         'valor' => 10.00
     ];
 });

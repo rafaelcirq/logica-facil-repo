@@ -12,6 +12,8 @@ use App\Entities\Alunos;
  */
 class AlunosTransformer extends TransformerAbstract
 {
+    // protected $defaultIncludes = ['turmas'];
+
     /**
      * Transform the Alunos entity.
      *
@@ -44,5 +46,10 @@ class AlunosTransformer extends TransformerAbstract
     public function includeTestes(Alunos $model)
     {
         return $this->collection($model->testes, new TestesTransformer());
+    }
+
+    public function includeTurmas(Alunos $model)
+    {
+        return $this->collection($model->turmas, new TurmasTransformer());
     }
 }
