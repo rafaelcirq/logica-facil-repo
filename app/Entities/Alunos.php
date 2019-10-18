@@ -26,11 +26,11 @@ class Alunos extends Model implements Transformable
     protected $with = array('user');
 
     public function instituicoes() {
-        return $this->belongsToMany(Instituicoes::class, 'alunos_has_instituicoes', 'alunos_id', 'instituicoes_id');
+        return $this->belongsToMany(Instituicoes::class);
     }
 
     public function turmas() {
-        return $this->belongsToMany(Turmas::class, 'turmas_has_alunos');
+        return $this->belongsToMany(Turmas::class);
     }
 
     public function user() {
@@ -38,7 +38,7 @@ class Alunos extends Model implements Transformable
     }
 
     public function testes() {
-        return $this->belongsToMany(Testes::class, 'alunos_has_testes');
+        return $this->belongsToMany(Testes::class);
     }
 
     public function sessoes() {

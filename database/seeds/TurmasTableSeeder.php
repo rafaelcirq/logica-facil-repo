@@ -11,10 +11,11 @@ class TurmasTableSeeder extends Seeder
      */
     public function run()
     {
-        $turmas = factory(\App\Entities\Turmas::class, 50)->create();
+        $turma = factory(\App\Entities\Turmas::class, 50)->create();
 
-        App\Entities\Alunos::All()->each(function ($aluno) use ($turmas){
-            $aluno->turmas()->saveMany($turmas);
+        App\Entities\Alunos::All()->each(function ($aluno) use ($turma){
+            // $aluno->turmas()->saveMany($turma);
+            $aluno->turmas()->attach($turma);
          });
     }
 }

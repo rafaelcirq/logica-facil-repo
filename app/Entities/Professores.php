@@ -27,7 +27,7 @@ class Professores extends Model implements Transformable
     }
 
     public function instituicoes() {
-        return $this->belongsToMany(Instituicoes::class, 'professores_has_instituicoes', 'professores_id', 'instituicoes_id');
+        return $this->belongsToMany(Instituicoes::class);
     }
 
     public function turmas() {

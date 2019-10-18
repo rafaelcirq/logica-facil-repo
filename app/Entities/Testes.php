@@ -20,10 +20,10 @@ class Testes extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['alunos_id', 'turmas_id', 'nota', 'valor'];
+    protected $fillable = ['alunos_id', 'turmas_id', 'nome', 'nota', 'valor', 'data_inicio', 'data_fim'];
 
     public function aluno() {
-        return $this->belongsToMany(Alunos::class, 'alunos_has_testes');
+        return $this->belongsToMany(Alunos::class);
     }
 
     public function turma() {

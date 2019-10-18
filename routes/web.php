@@ -45,5 +45,6 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('turmas', 'TurmasController');
     Route::get('turma/{turmaId}/alunos', 'TurmasController@getAlunosByTurma')->name('turmas.alunosByTurma');
+    Route::get('turma/{turmaId}/testes', 'TurmasController@getTestesByTurma')->name('turmas.testesByTurma');
 
 });

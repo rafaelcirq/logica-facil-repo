@@ -23,6 +23,9 @@ class CreateTestesTable extends Migration
             ->onUpdate('cascade')
             ->onDelete('cascade');
             
+            $table->string('nome');
+            $table->dateTime('data_inicio');
+            $table->dateTime('data_limite');
             $table->decimal('valor', 4, 2);
 
             $table->timestamps();

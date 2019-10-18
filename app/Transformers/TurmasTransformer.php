@@ -12,7 +12,7 @@ use App\Entities\Turmas;
  */
 class TurmasTransformer extends TransformerAbstract
 {
-    protected $defaultIncludes = ['instituicao'];
+    protected $defaultIncludes = ['instituicao', 'alunos'];
 
     /**
      * Transform the Turmas entity.

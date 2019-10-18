@@ -24,8 +24,9 @@ class Turmas extends Model implements Transformable
 
     protected $with = array('instituicao', 'alunos');
 
-    public function alunos() {
-        return $this->belongsToMany(Alunos::class, 'turmas_has_alunos');
+    public function alunos()
+    {
+        return $this->belongsToMany(Alunos::class);
     }
 
     public function instituicao() {
@@ -39,5 +40,4 @@ class Turmas extends Model implements Transformable
     public function testes() {
         return $this->hasMany(Testes::class);
     }
-
 }

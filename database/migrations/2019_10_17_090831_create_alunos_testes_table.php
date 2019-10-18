@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTurmasHasAlunosTable extends Migration
+class CreateAlunosTestesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,7 @@ class CreateTurmasHasAlunosTable extends Migration
      */
     public function up()
     {
-        Schema::create('turmas_has_alunos', function (Blueprint $table) {
-            $table->integer('turmas_id')->unsigned();
-            $table->foreign('turmas_id')
-            ->references('id')
-            ->on('turmas')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+        Schema::create('alunos_testes', function (Blueprint $table) {
 
             $table->integer('alunos_id')->unsigned();
             $table->foreign('alunos_id')
@@ -27,6 +21,18 @@ class CreateTurmasHasAlunosTable extends Migration
             ->on('alunos')
             ->onUpdate('cascade')
             ->onDelete('cascade');
+
+            $table->integer('testes_id')->unsigned();
+            $table->foreign('testes_id')
+            ->references('id')
+            ->on('testes')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
+            $table->decimal('nota', 4, 2);
+
+            $table->timestamps();
+            $table->primary(['alunos_id','testes_id']);
         });
     }
 
@@ -37,6 +43,6 @@ class CreateTurmasHasAlunosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('turmas_has_alunos');
+        Schema::dropIfExists('alunos_testes');
     }
 }

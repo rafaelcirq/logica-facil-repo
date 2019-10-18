@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\Turmas;
 use App\Http\Requests\TurmasCreateRequest;
 use App\Http\Requests\TurmasUpdateRequest;
+use App\Presenters\TestesPresenter;
 use App\Presenters\TurmasPresenter;
 use App\Repositories\AlunosRepository;
 use App\Repositories\ProfessoresRepository;
+use App\Repositories\TestesRepository;
 use App\Repositories\TurmasRepository;
 use App\Validators\TurmasValidator;
 use Illuminate\Http\Request;
@@ -42,18 +45,24 @@ class TurmasController extends Controller
     protected $professoresRepository;
 
     /**
+     * @var TestesRepository
+     */
+    protected $testesRepository;
+
+    /**
      * TurmasController constructor.
      *
      * @param TurmasRepository $repository
      * @param TurmasValidator $validator
      */
-    public function __construct(TurmasRepository $repository, AlunosRepository $alunosRepository, ProfessoresRepository $professoresRepository, TurmasValidator $validator)
+    public function __construct(TurmasRepository $repository, AlunosRepository $alunosRepository, ProfessoresRepository $professoresRepository, TestesRepository $testesRepository, TurmasValidator $validator)
     {
         $this->repository = $repository;
         $this->validator = $validator;
 
         $this->alunosRepository = $alunosRepository;
         $this->professoresRepository = $professoresRepository;
+        $this->testesRepository = $testesRepository;
     }
 
     /**
@@ -64,11 +73,11 @@ class TurmasController extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        
+
         $this->repository->setPresenter(TurmasPresenter::class);
         $turmas = $this->getTurmasByUser();
 
-        if (request()->wantsJson())  {
+        if (request()->wantsJson()) {
             return $turmas;
         }
 
@@ -80,7 +89,8 @@ class TurmasController extends Controller
     /**
      * Busca todas as turmas do usuário
      */
-    private function getTurmasByUser() {
+    private function getTurmasByUser()
+    {
         if (Auth::user()->tipo == "Professor") {
             $professor = $this->professoresRepository->findByField('users_id', Auth::id())->first();
             return $professor->turmas;
@@ -90,7 +100,8 @@ class TurmasController extends Controller
         }
     }
 
-    private function getInstituicoesByUser() {
+    private function getInstituicoesByUser()
+    {
         if (Auth::user()->tipo == "Professor") {
             $professor = $this->professoresRepository->findByField('users_id', Auth::id())->first();
             return $professor->instituicoes;
@@ -244,14 +255,32 @@ class TurmasController extends Controller
         return redirect()->back()->with('message', 'Turmas deleted.');
     }
 
-    public function getAlunosByTurma($turmaId) {
-        $turma = $this->repository->find($turmaId);
-        
-        if (request()->wantsJson()) {
+    public function getAlunosByTurma($id)
+    {
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        $this->repository->setPresenter(TurmasPresenter::class);
+        $turma = \App\Entities\Turmas::find($id);
 
-            return response()->json([
-                'data' => $turma->alunos,
-            ]);
+        // dd($turma->alunos);
+
+        if (request()->wantsJson()) {
+            return $turma->alunos;
+        }
+    }
+
+    public function getTestesByTurma($id)
+    {
+        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
+        $this->repository->setPresenter(TestesPresenter::class);
+
+        $testes = $this->testesRepository->findWhere([
+            'turmas_id' => $id
+        ]);
+
+        // dd($testes);
+
+        if (request()->wantsJson()) {
+            return $testes;
         }
     }
 }
