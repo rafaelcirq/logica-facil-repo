@@ -4,7 +4,8 @@
         @endif
 
         <div class="col-lg-3" align="center">
-            <img src="/imagens/closed-envelop.png" idNumber="{{ $i }}" id="envelope_{{ $i }}" width="35%" class="imagem">
+            <img src="/imagens/closed-envelop.png" idNumber="{{ $i }}" id="envelope_{{ $i }}" width="35%"
+                class="imagem">
             <div id="valor_{{ $i }}" class="valorEnvelope" style="margin-top: -28%;"></div>
             <div id="nome_{{ $i }}" class=""></div>
             <label class="kt-radio" style="margin-left: 5%;">

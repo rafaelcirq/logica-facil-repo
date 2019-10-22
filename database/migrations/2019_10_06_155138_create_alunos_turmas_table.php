@@ -14,6 +14,13 @@ class CreateAlunosTurmasTable extends Migration
     public function up()
     {
         Schema::create('alunos_turmas', function (Blueprint $table) {
+            $table->integer('alunos_id')->unsigned();
+            $table->foreign('alunos_id')
+            ->references('id')
+            ->on('alunos')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
             $table->integer('turmas_id')->unsigned();
             $table->foreign('turmas_id')
             ->references('id')
@@ -21,12 +28,7 @@ class CreateAlunosTurmasTable extends Migration
             ->onUpdate('cascade')
             ->onDelete('cascade');
 
-            $table->integer('alunos_id')->unsigned();
-            $table->foreign('alunos_id')
-            ->references('id')
-            ->on('alunos')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+            $table->primary(['alunos_id','turmas_id']);
         });
     }
 

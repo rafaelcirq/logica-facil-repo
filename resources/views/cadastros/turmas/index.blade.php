@@ -35,20 +35,20 @@ Listagem
                             <select class="form-control bootstrap-select" id="filtro_instituicao">
                                 <option value="">Todas</option>
                                 @foreach ($instituicoes as $i)
-                                <option value="{{ $i->nome }}">{{ $i->nome }}</option>
+                                {{-- <option value="{{ $i->nome }}">{{ $i->nome }}</option> --}}
                                 @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
-                @if (Auth::user()->tipo == "Professor")
+                {{-- @if (Auth::user()->tipo == "Professor") --}}
                 <div class="col-md-4 kt-margin-b-20-tablet-and-mobile add-button">
                     <div class="kt-form__group kt-form__group--inline">
                         <button type="button" class="btn btn-outline-brand btn-elevate btn-pill"><i
                                 class="flaticon2-plus-1"></i> Nova Turma</button>&nbsp;
                     </div>
                 </div>
-                @endif
+                {{-- @endif --}}
             </div>
         </div>
     </div>

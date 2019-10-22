@@ -27,6 +27,8 @@ class CreateAlunosInstituicoesTable extends Migration
             ->on('instituicoes')
             ->onUpdate('cascade')
             ->onDelete('cascade');
+
+            $table->primary(['alunos_id','instituicoes_id']);
         });
     }
 

@@ -96,7 +96,10 @@ class TurmasController extends Controller
             return $professor->turmas;
         } else {
             $aluno = $this->alunosRepository->findByField('users_id', Auth::id())->first();
-            return $aluno->turmas;
+
+            $t = new \App\Entities\Instituicoes();
+            // return $aluno->turmas;
+            return $t->find(1);
         }
     }
 
@@ -107,7 +110,10 @@ class TurmasController extends Controller
             return $professor->instituicoes;
         } else {
             $aluno = $this->alunosRepository->findByField('users_id', Auth::id())->first();
-            return $aluno->instituicoes;
+            // return $aluno->instituicoes;
+            $repo = new \App\Entities\Instituicoes();
+            $repo = $repo->find(1);
+            return $repo;
         }
     }
 
