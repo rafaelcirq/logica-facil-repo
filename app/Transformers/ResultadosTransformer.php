@@ -3,23 +3,23 @@
 namespace App\Transformers;
 
 use League\Fractal\TransformerAbstract;
-use App\Entities\Testes;
+use App\Entities\Resultados;
 
 /**
- * Class TestesTransformer.
+ * Class ResultadosTransformer.
  *
  * @package namespace App\Transformers;
  */
-class TestesTransformer extends TransformerAbstract
+class ResultadosTransformer extends TransformerAbstract
 {
     /**
-     * Transform the Testes entity.
+     * Transform the Resultados entity.
      *
-     * @param \App\Entities\Testes $model
+     * @param \App\Entities\Resultados $model
      *
      * @return array
      */
-    public function transform(Testes $model)
+    public function transform(Resultados $model)
     {
         return [
             'id'         => (int) $model->id,

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTurmasTable extends Migration
+class CreateInstituicoesUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,13 @@ class CreateTurmasTable extends Migration
      */
     public function up()
     {
-        Schema::create('turmas', function (Blueprint $table) {
-            $table->increments('id');
+        Schema::create('instituicoes_users', function (Blueprint $table) {
+            $table->integer('users_id')->unsigned();
+            $table->foreign('users_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
             $table->integer('instituicoes_id')->unsigned();
             $table->foreign('instituicoes_id')
@@ -23,16 +28,7 @@ class CreateTurmasTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('users_id')->unsigned();
-            $table->foreign('users_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
-            $table->string('nome');
-
-            $table->timestamps();
+            $table->primary(['users_id', 'instituicoes_id']);
         });
     }
 
@@ -43,6 +39,6 @@ class CreateTurmasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('turmas');
+        Schema::dropIfExists('instituicoes_users');
     }
 }

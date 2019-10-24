@@ -11,6 +11,6 @@ class PerguntasTableSeeder extends Seeder
      */
     public function run()
     {
-        $pergunta = factory(\App\Entities\Perguntas::class, 50)->create();
+        $perguntas = factory(\App\Entities\Perguntas::class, 50)->create();
     }
 }

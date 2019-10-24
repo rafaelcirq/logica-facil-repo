@@ -6,7 +6,7 @@
         <div class="col-lg-3" align="center">
             <img src="/imagens/closed-envelop.png" idNumber="{{ $i }}" id="envelope_{{ $i }}" width="35%"
                 class="imagem">
-            <div id="valor_{{ $i }}" class="valorEnvelope" style="margin-top: -28%;"></div>
+            <div id="valor_{{ $i }}" class="valorEnvelope" style="margin-top: -28%;" nome_envelope="" idNumber="{{ $i }}"></div>
             <div id="nome_{{ $i }}" class=""></div>
             <label class="kt-radio" style="margin-left: 5%;">
                 <input type="radio" name="selecaoEnvelope" id="{{ $i }}">
@@ -14,11 +14,11 @@
             </label>
         </div>
 
-        @if((($i+1)%4)==0)
-</div>
-@endif
+    @if((($i+1)%4)==0)
+    </div>
+    @endif
 
-@endfor
+    @endfor
 
 </div>
 

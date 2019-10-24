@@ -15,7 +15,7 @@
 <p><p>* Não se usa acentuação;
 <p><p>* Não pode conter espaços no nome;
 <p><p>* Pode-se utilizar  letras maiúsculas ou minúsculas, porém sua variável deve ser usada exatamente como foi criada.
-<p><p>* Para adicionar um conteúdo a uma variável, obedeça aos padrões a seguir:
+<p><p>Para adicionar um conteúdo a uma variável, obedeça aos padrões a seguir:
 <p><p>* Selecione uma variável que você já nomeou
 <p><p>* Defina um valor numérico de no máximo quatro dígitos. Ex: 42.05 ou -123
 

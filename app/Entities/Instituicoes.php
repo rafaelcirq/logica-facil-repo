@@ -20,21 +20,15 @@ class Instituicoes extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['nome'];
-
-    public function alunos()
-    {
-        return $this->hasMany(Alunos::class);
-    }
-
-    public function professores()
-    {
-        return $this->hasMany(Professores::class);
-    }
+    protected $fillable = [];
 
     public function turmas()
     {
-        return $this->hasMany(Turmas::class);
+        return $this->hasMany('App\Entities\Turmas');
     }
 
+    public function usuarios()
+    {
+        return $this->belongsToMany('App\User', 'instituicoes_users', 'instituicoes_id', 'users_id');
+    }
 }

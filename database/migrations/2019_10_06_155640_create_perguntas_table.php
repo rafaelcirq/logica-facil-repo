@@ -18,12 +18,12 @@ class CreatePerguntasTable extends Migration
 
             $table->integer('testes_id')->unsigned();
             $table->foreign('testes_id')
-            ->references('id')
-            ->on('testes')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
-            
-            $table->decimal('pontuacao', 4, 2);
+                ->references('id')
+                ->on('testes')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->decimal('valor', 4, 2);
             $table->longText('texto');
 
             $table->timestamps();

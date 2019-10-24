@@ -7,11 +7,11 @@ use Prettus\Repository\Contracts\Transformable;
 use Prettus\Repository\Traits\TransformableTrait;
 
 /**
- * Class Perguntas.
+ * Class Resultados.
  *
  * @package namespace App\Entities;
  */
-class Perguntas extends Model implements Transformable
+class Resultados extends Model implements Transformable
 {
     use TransformableTrait;
 
@@ -27,9 +27,9 @@ class Perguntas extends Model implements Transformable
         return $this->belongsTo('App\Entities\Testes', 'testes_id');
     }
 
-    public function alternativas()
+    public function usuario()
     {
-        return $this->hasMany('App\Entities\Alternativas');
+        return $this->belongsTo('App\User', 'users_id');
     }
 
 }

@@ -4,16 +4,16 @@ namespace App\Repositories;
 
 use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
-use App\Repositories\AlunosRepository;
-use App\Entities\Alunos;
-use App\Validators\AlunosValidator;
+use App\Repositories\ResultadosRepository;
+use App\Entities\Resultados;
+use App\Validators\ResultadosValidator;
 
 /**
- * Class AlunosRepositoryEloquent.
+ * Class ResultadosRepositoryEloquent.
  *
  * @package namespace App\Repositories;
  */
-class AlunosRepositoryEloquent extends BaseRepository implements AlunosRepository
+class ResultadosRepositoryEloquent extends BaseRepository implements ResultadosRepository
 {
     /**
      * Specify Model class name
@@ -22,7 +22,7 @@ class AlunosRepositoryEloquent extends BaseRepository implements AlunosRepositor
      */
     public function model()
     {
-        return Alunos::class;
+        return Resultados::class;
     }
 
     /**
@@ -33,7 +33,7 @@ class AlunosRepositoryEloquent extends BaseRepository implements AlunosRepositor
     public function validator()
     {
 
-        return AlunosValidator::class;
+        return ResultadosValidator::class;
     }
 
 

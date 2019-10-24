@@ -15,14 +15,14 @@ class CreateTestesTable extends Migration
     {
         Schema::create('testes', function (Blueprint $table) {
             $table->increments('id');
-            
+
             $table->integer('turmas_id')->unsigned();
             $table->foreign('turmas_id')
-            ->references('id')
-            ->on('turmas')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
-            
+                ->references('id')
+                ->on('turmas')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
             $table->string('nome');
             $table->dateTime('data_inicio');
             $table->dateTime('data_limite');

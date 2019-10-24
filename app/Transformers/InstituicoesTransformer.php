@@ -24,25 +24,10 @@ class InstituicoesTransformer extends TransformerAbstract
         return [
             'id'         => (int) $model->id,
 
-            'nome'       => $model->nome,
+            /* place your other model properties here */
 
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at
         ];
-    }
-
-    public function includeAlunos(Instituicoes $model)
-    {
-        return $this->collection($model->alunos, new AlunosTransformer());
-    }
-
-    public function includeProfessores(Instituicoes $model)
-    {
-        return $this->collection($model->professores, new ProfessoresTransformer());
-    }
-
-    public function includeTurmas(Instituicoes $model)
-    {
-        return $this->collection($model->turmas, new TurmasTransformer());
     }
 }

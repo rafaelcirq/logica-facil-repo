@@ -20,10 +20,15 @@ class Alternativas extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['perguntas_id', 'texto', 'correta'];
+    protected $fillable = [];
 
-    public function pergunta() {
-        return $this->belongsTo(Perguntas::class, 'perguntas_id');
+    public function pergunta()
+    {
+        return $this->belongsTo('App\Entities\Perguntas', 'perguntas_id');
     }
 
+    public function resultados()
+    {
+        return $this->belongsToMany('App\Entities\Resultados');
+    }
 }

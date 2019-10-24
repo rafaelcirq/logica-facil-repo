@@ -15,15 +15,15 @@ class CreateAlternativasTable extends Migration
     {
         Schema::create('alternativas', function (Blueprint $table) {
             $table->increments('id');
-            
+
             $table->integer('perguntas_id')->unsigned();
             $table->foreign('perguntas_id')
-            ->references('id')
-            ->on('perguntas')
-            ->onUpdate('cascade')
-            ->onDelete('cascade');
+                ->references('id')
+                ->on('perguntas')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
-            $table->boolean('correta', 4, 2);
+            $table->boolean('is_correta');
             $table->longText('texto');
 
             $table->timestamps();

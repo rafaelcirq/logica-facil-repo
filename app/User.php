@@ -23,14 +23,23 @@ class User extends Authenticatable implements Transformable
      */
     protected $fillable = ['name', 'email', 'password', 'tipo'];
 
-    public function professor()
+    public function instituicoes()
     {
-        return $this->hasOne(Professores::class, 'professores_id');
+        return $this->belongsToMany('App\Entities\Instituicoes', 'instituicoes_users', 'instituicoes_id', 'users_id');
     }
 
-    public function aluno()
+    public function resultados()
     {
-        return $this->hasOne(Alunos::class, 'alunos_id');
+        return $this->hasMany('App\Entities\Resultados', 'users_id');
     }
 
+    public function turmasProfessor()
+    {
+        return $this->hasMany('App\Entities\Turmas', 'users_id');
+    }
+
+    public function turmasAluno()
+    {
+        return $this->belongsToMany('App\Entities\Turmas', 'turmas_users', 'turmas_id', 'users_id');
+    }
 }

@@ -24,16 +24,10 @@ class AlternativasTransformer extends TransformerAbstract
         return [
             'id'         => (int) $model->id,
 
-            'texto'  => $model->texto,
-            'correta'      => $model->correta,
+            /* place your other model properties here */
 
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at
         ];
-    }
-
-    public function includePergunta(Alternativas $model)
-    {
-        return $this->item($model->pergunta, new PerguntasTransformer());
     }
 }

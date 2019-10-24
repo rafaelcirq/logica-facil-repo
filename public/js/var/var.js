@@ -67,6 +67,11 @@ var Dinamica = function() {
     var setNome = function(nome) {
         var id = $("input[name='selecaoEnvelope']:checked").attr("id");
         $("#nome_" + id).text(nome);
+        $("#valor_" + id).attr("nome_envelope", nome);
+        $("#compilador_nome_" + id).text(nome);
+        // $("#compilador_div_" + id).attr("hidden", false);
+        $("#compilador_div_" + id).removeAttr("style");
+        // $("#compilador_valor_" + id).attr("nome_envelope", nome);
     }
 
     var onClickSetValor = function() {
@@ -74,7 +79,7 @@ var Dinamica = function() {
 
             var valor = $("#campoValor").val();
             if (valor && validarValor(valor)) {
-                setValor(valor);
+                setValor(null, valor);
                 normalizarCampo('campoValor');
             } else {
                 destacarCampo('campoValor');
@@ -91,24 +96,24 @@ var Dinamica = function() {
         $("#" + nomeCampo).addClass("is-invalid");
     }
 
-    var setValor = function(valor) {
-        var id = $("input[name='selecaoEnvelope']:checked").attr("id");
+    window.setValorByCompilador = function(envelope, valor) {
+        var id = $("div").find("[nome_envelope='" + envelope + "']").attr("idnumber");
+        setValor(id, valor);
+    }
+
+    var setValor = function(id, valor) {
+        if (!id) id = $("input[name='selecaoEnvelope']:checked").attr("id");
         $("#valor_" + id).text(valor);
+        $("#compilador_valor_" + id).text(valor);
     }
 
     var validarValor = function(valor) {
         return !(!$.isNumeric(valor) || valor.length > 4);
     }
 
-    var validarNomeUnico = function(nome) {
-        var retorno = true;
-        $("#envelopeSelecionado option").each(function() {
-            var optionName = $(this).text();
-            if (nome === optionName) {
-                retorno = false;
-            }
-        });
-        return retorno;
+    window.envelopeExiste = function(nomeEnvelope) {
+        var div = $("div").find("[nome_envelope='" + nomeEnvelope + "']");
+        return (div.length > 0);
     }
 
     var validarNome = function(nome) {
@@ -122,7 +127,6 @@ var Dinamica = function() {
             primeiroCaractere = nome;
         }
         if ($.isNumeric(primeiroCaractere)) {
-            // console.log('primeiro caracter deve ser letra');
             nomeValido = false;
         }
 
@@ -142,12 +146,11 @@ var Dinamica = function() {
         // sem caracteres especiais
         var alphaExp = /^[a-zA-Z-0-9-_]+$/;
         if (!nome.match(alphaExp)) {
-            // console.log('contém caracter especial', nome);
             nomeValido = false;
         }
 
         // nome deve ser unico
-        if (!validarNomeUnico(nome)) {
+        if (envelopeExiste(nome)) {
             nomeValido = false;
         };
 
@@ -163,6 +166,19 @@ var Dinamica = function() {
             } else {
                 $(this).attr("src", "imagens/opened-envelop.png")
                 $("#valor_" + id).show();
+            }
+        });
+    }
+
+    var abreFechaEnvelopeCompilador = function() {
+        $(".imagemCompilador").click(function() {
+            var id = $(this).attr('idNumber');
+            if ($(this).attr("src") === "imagens/opened-envelop.png") {
+                $("#compilador_valor_" + id).hide();
+                $(this).attr("src", "imagens/closed-envelop.png");
+            } else {
+                $(this).attr("src", "imagens/opened-envelop.png")
+                $("#compilador_valor_" + id).show();
             }
         });
     }
@@ -204,6 +220,7 @@ var Dinamica = function() {
 
             escondeValores();
             abreFechaEnvelope();
+            abreFechaEnvelopeCompilador();
             setNomeValor();
             // reiniciar();
 

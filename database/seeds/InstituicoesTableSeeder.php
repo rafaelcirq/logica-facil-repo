@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
+
 class InstituicoesTableSeeder extends Seeder
 {
     /**
@@ -13,12 +14,8 @@ class InstituicoesTableSeeder extends Seeder
     {
         $instituicoes = factory(\App\Entities\Instituicoes::class, 50)->create();
 
-        App\Entities\Professores::All()->each(function ($professor) use ($instituicoes){
-            $professor->instituicoes()->saveMany($instituicoes);
-         });
-
-         App\Entities\Alunos::All()->each(function ($aluno) use ($instituicoes){
-            $aluno->instituicoes()->saveMany($instituicoes);
-         });
+        App\User::All()->each(function ($user) use ($instituicoes) {
+            $user->instituicoes()->attach($instituicoes);
+        });
     }
 }

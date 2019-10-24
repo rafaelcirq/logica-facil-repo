@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTurmasTable extends Migration
+class CreateAlternativasResultadosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,26 +13,24 @@ class CreateTurmasTable extends Migration
      */
     public function up()
     {
-        Schema::create('turmas', function (Blueprint $table) {
-            $table->increments('id');
-
-            $table->integer('instituicoes_id')->unsigned();
-            $table->foreign('instituicoes_id')
+        Schema::create('alternativas_resultados', function (Blueprint $table) {
+            $table->integer('alternativas_id')->unsigned();
+            $table->foreign('alternativas_id')
                 ->references('id')
-                ->on('instituicoes')
+                ->on('alternativas')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('users_id')->unsigned();
-            $table->foreign('users_id')
+            $table->integer('resultados_id')->unsigned();
+            $table->foreign('resultados_id')
                 ->references('id')
-                ->on('users')
+                ->on('resultados')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->string('nome');
+            $table->boolean('is_escolhida');
 
-            $table->timestamps();
+            $table->primary(['alternativas_id', 'resultados_id']);
         });
     }
 
@@ -43,6 +41,6 @@ class CreateTurmasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('turmas');
+        Schema::dropIfExists('alternativas_resultados');
     }
 }

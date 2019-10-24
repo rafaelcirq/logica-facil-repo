@@ -20,24 +20,20 @@ class Turmas extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['instituicoes_id', 'professores_id', 'nome'];
+    protected $fillable = [];
 
-    protected $with = array('instituicao', 'alunos');
+    public function testes()
+    {
+        return $this->hasMany('App\Entities\Testes');
+    }
+
+    public function professor()
+    {
+        return $this->belongsTo('App\User', 'users_id');
+    }
 
     public function alunos()
     {
-        return $this->belongsToMany(Alunos::class);
-    }
-
-    public function instituicao() {
-        return $this->belongsTo(Instituicoes::class, 'instituicoes_id');
-    }
-
-    public function professor() {
-        return $this->belongsTo(Professores::class, 'professores_id');
-    }
-
-    public function testes() {
-        return $this->hasMany(Testes::class);
+        return $this->belongsToMany('App\User', 'turmas_users', 'turmas_id', 'users_id');
     }
 }

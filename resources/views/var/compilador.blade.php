@@ -1,38 +1,42 @@
 <div class="form-group row">
     <div class="col-lg-6">
-        <div class="col-lg-8">
+        {{-- <div class="col-lg-8">
             <label>Comandos:</label>
             <input type="text" id="comando" class="form-control">
         </div>
         <div class="col-lg-4">
             <button id="compilar" style="margin-top: 17%;" class="btn btn-primary">Compilar</button>
-        </div>
+        </div> --}}
         <div class="form-group row">
-                <div class="col-lg-3" align="center">
-                    <img src="/imagens/closed-envelop.png" width="35%" class="imagem">
-                    <div class="valorEnvelope" style="margin-top: -28%;"></div>
-                    <div class="">envelope_01</div>
-                    <label class="kt-radio" style="margin-left: 5%;">
-                        <span></span>
-                    </label>
-                </div>
-                <div class="col-lg-3" align="center">
-                    <img src="/imagens/closed-envelop.png" width="35%" class="imagem">
-                    <div class="valorEnvelope" style="margin-top: -28%;"></div>
-                    <div class="">envelope_02</div>
-                    <label class="kt-radio" style="margin-left: 5%;">
-                        <span></span>
-                    </label>
-                </div>
-                <div class="col-lg-3" align="center">
-                    <img src="/imagens/opened-envelop.png" width="35%" class="imagem">
-                    <div class="valorEnvelope" style="margin-top: -28%;">16</div>
-                    <div class="">envelope_03</div>
-                    <label class="kt-radio" style="margin-left: 5%;">
-                        <span></span>
-                    </label>
+            <label>Comandos</label>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="" id="comando">
+                <div class="input-group-append">
+                    <button class="btn btn-secondary" type="button" id="compilar">Compilar</button>
                 </div>
             </div>
+        </div>
+        <div class="form-group row">
+            
+            @for ($i = 0; $i < 12; $i++) @if(($i%4)==0) <div class="form-group row">
+                @endif
+        
+                <div class="col-lg-3" align="center" id="compilador_div_{{ $i }}" style="visibility: hidden;">
+                    <img src="/imagens/closed-envelop.png" idNumber="{{ $i }}" id="envelope_{{ $i }}" width="80%"
+                        class="imagemCompilador">
+                    <div id="compilador_valor_{{ $i }}" class="valorEnvelope" style="margin-top: -59%;
+                    font-size: 150%;"></div>
+                    <div id="compilador_nome_{{ $i }}" style="text-align: center;
+                    font-size: 110%;" class=""></div>
+                </div>
+        
+            @if((($i+1)%4)==0)
+            </div>
+            @endif
+        
+            @endfor
+
+        </div>
     </div>
     <div class="col-lg-6 form-group-sub" style="text-align: center;">
         <img src="/imagens/monitor.png" width="50%">

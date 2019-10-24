@@ -2,20 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Entities\Turmas;
-use App\Http\Requests\TurmasCreateRequest;
-use App\Http\Requests\TurmasUpdateRequest;
-use App\Presenters\TestesPresenter;
-use App\Presenters\TurmasPresenter;
-use App\Repositories\AlunosRepository;
-use App\Repositories\ProfessoresRepository;
-use App\Repositories\TestesRepository;
-use App\Repositories\TurmasRepository;
-use App\Validators\TurmasValidator;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
+use App\Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
+use App\Http\Requests\TurmasCreateRequest;
+use App\Http\Requests\TurmasUpdateRequest;
+use App\Repositories\TurmasRepository;
+use App\Validators\TurmasValidator;
 
 /**
  * Class TurmasController.
@@ -35,34 +30,15 @@ class TurmasController extends Controller
     protected $validator;
 
     /**
-     * @var AlunosRepository
-     */
-    protected $alunosRepository;
-
-    /**
-     * @var ProfessoresRepository
-     */
-    protected $professoresRepository;
-
-    /**
-     * @var TestesRepository
-     */
-    protected $testesRepository;
-
-    /**
      * TurmasController constructor.
      *
      * @param TurmasRepository $repository
      * @param TurmasValidator $validator
      */
-    public function __construct(TurmasRepository $repository, AlunosRepository $alunosRepository, ProfessoresRepository $professoresRepository, TestesRepository $testesRepository, TurmasValidator $validator)
+    public function __construct(TurmasRepository $repository, TurmasValidator $validator)
     {
         $this->repository = $repository;
-        $this->validator = $validator;
-
-        $this->alunosRepository = $alunosRepository;
-        $this->professoresRepository = $professoresRepository;
-        $this->testesRepository = $testesRepository;
+        $this->validator  = $validator;
     }
 
     /**
@@ -73,48 +49,16 @@ class TurmasController extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-
-        $this->repository->setPresenter(TurmasPresenter::class);
-        $turmas = $this->getTurmasByUser();
+        $turmas = $this->repository->all();
 
         if (request()->wantsJson()) {
-            return $turmas;
+
+            return response()->json([
+                'data' => $turmas,
+            ]);
         }
 
-        $instituicoes = $this->getInstituicoesByUser();
-
-        return view('cadastros.turmas.index', compact('turmas', 'instituicoes'));
-    }
-
-    /**
-     * Busca todas as turmas do usuário
-     */
-    private function getTurmasByUser()
-    {
-        if (Auth::user()->tipo == "Professor") {
-            $professor = $this->professoresRepository->findByField('users_id', Auth::id())->first();
-            return $professor->turmas;
-        } else {
-            $aluno = $this->alunosRepository->findByField('users_id', Auth::id())->first();
-
-            $t = new \App\Entities\Instituicoes();
-            // return $aluno->turmas;
-            return $t->find(1);
-        }
-    }
-
-    private function getInstituicoesByUser()
-    {
-        if (Auth::user()->tipo == "Professor") {
-            $professor = $this->professoresRepository->findByField('users_id', Auth::id())->first();
-            return $professor->instituicoes;
-        } else {
-            $aluno = $this->alunosRepository->findByField('users_id', Auth::id())->first();
-            // return $aluno->instituicoes;
-            $repo = new \App\Entities\Instituicoes();
-            $repo = $repo->find(1);
-            return $repo;
-        }
+        return view('turmas.index', compact('turmas'));
     }
 
     /**
@@ -136,7 +80,7 @@ class TurmasController extends Controller
 
             $response = [
                 'message' => 'Turmas created.',
-                'data' => $turma->toArray(),
+                'data'    => $turma->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -148,8 +92,8 @@ class TurmasController extends Controller
         } catch (ValidatorException $e) {
             if ($request->wantsJson()) {
                 return response()->json([
-                    'error' => true,
-                    'message' => $e->getMessageBag(),
+                    'error'   => true,
+                    'message' => $e->getMessageBag()
                 ]);
             }
 
@@ -175,11 +119,7 @@ class TurmasController extends Controller
             ]);
         }
 
-        if (Auth::user()->tipo == "Professor") {
-            return view('cadastros.turmas.index-professores', compact('turma'));
-        } else {
-            return view('cadastros.turmas.index-alunos', compact('turma'));
-        }
+        return view('turmas.show', compact('turma'));
     }
 
     /**
@@ -216,7 +156,7 @@ class TurmasController extends Controller
 
             $response = [
                 'message' => 'Turmas updated.',
-                'data' => $turma->toArray(),
+                'data'    => $turma->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -230,14 +170,15 @@ class TurmasController extends Controller
             if ($request->wantsJson()) {
 
                 return response()->json([
-                    'error' => true,
-                    'message' => $e->getMessageBag(),
+                    'error'   => true,
+                    'message' => $e->getMessageBag()
                 ]);
             }
 
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -259,34 +200,5 @@ class TurmasController extends Controller
         }
 
         return redirect()->back()->with('message', 'Turmas deleted.');
-    }
-
-    public function getAlunosByTurma($id)
-    {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $this->repository->setPresenter(TurmasPresenter::class);
-        $turma = \App\Entities\Turmas::find($id);
-
-        // dd($turma->alunos);
-
-        if (request()->wantsJson()) {
-            return $turma->alunos;
-        }
-    }
-
-    public function getTestesByTurma($id)
-    {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $this->repository->setPresenter(TestesPresenter::class);
-
-        $testes = $this->testesRepository->findWhere([
-            'turmas_id' => $id
-        ]);
-
-        // dd($testes);
-
-        if (request()->wantsJson()) {
-            return $testes;
-        }
     }
 }

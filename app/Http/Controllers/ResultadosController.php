@@ -7,35 +7,35 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Prettus\Validator\Contracts\ValidatorInterface;
 use Prettus\Validator\Exceptions\ValidatorException;
-use App\Http\Requests\AlunosCreateRequest;
-use App\Http\Requests\AlunosUpdateRequest;
-use App\Repositories\AlunosRepository;
-use App\Validators\AlunosValidator;
+use App\Http\Requests\ResultadosCreateRequest;
+use App\Http\Requests\ResultadosUpdateRequest;
+use App\Repositories\ResultadosRepository;
+use App\Validators\ResultadosValidator;
 
 /**
- * Class AlunosController.
+ * Class ResultadosController.
  *
  * @package namespace App\Http\Controllers;
  */
-class AlunosController extends Controller
+class ResultadosController extends Controller
 {
     /**
-     * @var AlunosRepository
+     * @var ResultadosRepository
      */
     protected $repository;
 
     /**
-     * @var AlunosValidator
+     * @var ResultadosValidator
      */
     protected $validator;
 
     /**
-     * AlunosController constructor.
+     * ResultadosController constructor.
      *
-     * @param AlunosRepository $repository
-     * @param AlunosValidator $validator
+     * @param ResultadosRepository $repository
+     * @param ResultadosValidator $validator
      */
-    public function __construct(AlunosRepository $repository, AlunosValidator $validator)
+    public function __construct(ResultadosRepository $repository, ResultadosValidator $validator)
     {
         $this->repository = $repository;
         $this->validator  = $validator;
@@ -49,38 +49,38 @@ class AlunosController extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $alunos = $this->repository->all();
+        $resultados = $this->repository->all();
 
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $alunos,
+                'data' => $resultados,
             ]);
         }
 
-        return view('alunos.index', compact('alunos'));
+        return view('resultados.index', compact('resultados'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  AlunosCreateRequest $request
+     * @param  ResultadosCreateRequest $request
      *
      * @return \Illuminate\Http\Response
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function store(AlunosCreateRequest $request)
+    public function store(ResultadosCreateRequest $request)
     {
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
 
-            $aluno = $this->repository->create($request->all());
+            $resultado = $this->repository->create($request->all());
 
             $response = [
-                'message' => 'Alunos created.',
-                'data'    => $aluno->toArray(),
+                'message' => 'Resultados created.',
+                'data'    => $resultado->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -110,16 +110,16 @@ class AlunosController extends Controller
      */
     public function show($id)
     {
-        $aluno = $this->repository->find($id);
+        $resultado = $this->repository->find($id);
 
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $aluno,
+                'data' => $resultado,
             ]);
         }
 
-        return view('alunos.show', compact('aluno'));
+        return view('resultados.show', compact('resultado'));
     }
 
     /**
@@ -131,32 +131,32 @@ class AlunosController extends Controller
      */
     public function edit($id)
     {
-        $aluno = $this->repository->find($id);
+        $resultado = $this->repository->find($id);
 
-        return view('alunos.edit', compact('aluno'));
+        return view('resultados.edit', compact('resultado'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  AlunosUpdateRequest $request
+     * @param  ResultadosUpdateRequest $request
      * @param  string            $id
      *
      * @return Response
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function update(AlunosUpdateRequest $request, $id)
+    public function update(ResultadosUpdateRequest $request, $id)
     {
         try {
 
             $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $aluno = $this->repository->update($request->all(), $id);
+            $resultado = $this->repository->update($request->all(), $id);
 
             $response = [
-                'message' => 'Alunos updated.',
-                'data'    => $aluno->toArray(),
+                'message' => 'Resultados updated.',
+                'data'    => $resultado->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -194,11 +194,11 @@ class AlunosController extends Controller
         if (request()->wantsJson()) {
 
             return response()->json([
-                'message' => 'Alunos deleted.',
+                'message' => 'Resultados deleted.',
                 'deleted' => $deleted,
             ]);
         }
 
-        return redirect()->back()->with('message', 'Alunos deleted.');
+        return redirect()->back()->with('message', 'Resultados deleted.');
     }
 }

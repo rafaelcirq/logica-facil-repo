@@ -24,26 +24,10 @@ class PerguntasTransformer extends TransformerAbstract
         return [
             'id'         => (int) $model->id,
 
-            'pontuacao'  => $model->pontuacao,
-            'texto'      => $model->texto,
+            /* place your other model properties here */
 
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at
         ];
-    }
-
-    public function includeAluno(Perguntas $model)
-    {
-        return $this->item($model->aluno, new AlunosTransformer());
-    }
-
-    public function includeTeste(Perguntas $model)
-    {
-        return $this->item($model->teste, new TestesTransformer());
-    }
-
-    public function includeAlternativas(Perguntas $model)
-    {
-        return $this->item($model->alternativas, new AlternativasTransformer());
     }
 }

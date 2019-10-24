@@ -11,6 +11,6 @@ class AlternativasTableSeeder extends Seeder
      */
     public function run()
     {
-        $alternativa = factory(\App\Entities\Alternativas::class, 200)->create();
+        $alternativas = factory(\App\Entities\Alternativas::class, 200)->create();
     }
 }
