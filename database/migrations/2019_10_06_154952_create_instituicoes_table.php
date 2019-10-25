@@ -18,7 +18,7 @@ class CreateInstituicoesTable extends Migration
 
             $table->string('nome');
             $table->string('sigla');
-            $table->string('cnpj')->unique();
+            $table->string('codigo')->unique();
 
             $table->timestamps();
         });

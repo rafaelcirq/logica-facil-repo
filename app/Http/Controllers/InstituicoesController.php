@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\InstituicoesCreateRequest;
 use App\Http\Requests\InstituicoesUpdateRequest;
 use App\Repositories\InstituicoesRepository;
 use App\Validators\InstituicoesValidator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Prettus\Validator\Contracts\ValidatorInterface;
+use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
  * Class InstituicoesController.
@@ -38,7 +37,7 @@ class InstituicoesController extends Controller
     public function __construct(InstituicoesRepository $repository, InstituicoesValidator $validator)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
+        $this->validator = $validator;
     }
 
     /**
@@ -48,8 +47,7 @@ class InstituicoesController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $instituicoes = $this->repository->all();
+        $instituicoes = Auth::user()->instituicoes;
 
         if (request()->wantsJson()) {
 
@@ -58,7 +56,15 @@ class InstituicoesController extends Controller
             ]);
         }
 
-        return view('instituicoes.index', compact('instituicoes'));
+        return view('cadastros.instituicoes.index', compact('instituicoes'));
+    }
+
+    /**
+     * Chama a tela de importação de instituições
+     */
+    public function create()
+    {
+        return view('cadastros.instituicoes.import');
     }
 
     /**
@@ -80,7 +86,7 @@ class InstituicoesController extends Controller
 
             $response = [
                 'message' => 'Instituicoes created.',
-                'data'    => $instituico->toArray(),
+                'data' => $instituico->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -92,8 +98,8 @@ class InstituicoesController extends Controller
         } catch (ValidatorException $e) {
             if ($request->wantsJson()) {
                 return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
+                    'error' => true,
+                    'message' => $e->getMessageBag(),
                 ]);
             }
 
@@ -156,7 +162,7 @@ class InstituicoesController extends Controller
 
             $response = [
                 'message' => 'Instituicoes updated.',
-                'data'    => $instituico->toArray(),
+                'data' => $instituico->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -170,15 +176,14 @@ class InstituicoesController extends Controller
             if ($request->wantsJson()) {
 
                 return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
+                    'error' => true,
+                    'message' => $e->getMessageBag(),
                 ]);
             }
 
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
-
 
     /**
      * Remove the specified resource from storage.
@@ -200,5 +205,38 @@ class InstituicoesController extends Controller
         }
 
         return redirect()->back()->with('message', 'Instituicoes deleted.');
+    }
+
+    /**
+     * Retorna as universidades por Estado
+     */
+    public function getUniversidades($uf)
+    {
+        $arquivo = "instituicoes/universidades.csv";
+        $csv = file_get_contents($arquivo);
+        $array = explode("\n", $csv);
+        $array = array_map("utf8_encode", $array);
+        $instituicoes_array = array();
+        for ($i = 11; $i < 2376; $i++) {
+            $linha_array = explode(";", $array[$i]);
+            $uf_ie = $linha_array["9"];
+            if ($uf_ie == $uf) {
+                $codigo = $linha_array['1'];
+                $nome = $linha_array['2'];
+                $sigla = $linha_array['3'];
+                $instituicao = new \App\Entities\Instituicoes;
+                $instituicao->codigo = $codigo;
+                $instituicao->nome = $nome;
+                $instituicao->sigla = $sigla;
+                array_push($instituicoes_array, $instituicao);
+            }
+        }
+        $instituicoes = collect($instituicoes_array);
+        return $instituicoes;
+    }
+
+    public function getEscolas($uf)
+    {
+        dd($uf);
     }
 }

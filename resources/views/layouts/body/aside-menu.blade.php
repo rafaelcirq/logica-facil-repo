@@ -24,11 +24,11 @@
                     <i class="kt-menu__section-icon flaticon-more-v2"></i>
                 </li> --}}
             <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">
-                <a href="/instituicoes" class="kt-menu__link kt-menu__toggle">
+                <a href="/minhas-instituicoes" class="kt-menu__link kt-menu__toggle">
                     <span class="kt-menu__link-icon">
                         <i class="flaticon-presentation"></i>
                     </span>
-                    <span class="kt-menu__link-text">Instituições de Ensino</span>
+                    <span class="kt-menu__link-text">Minhas Instituições de Ensino</span>
                 </a>
             </li>
             {{-- <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover">

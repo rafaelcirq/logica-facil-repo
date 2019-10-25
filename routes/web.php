@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('users', 'UsersController');
+Route::resource('users', 'UsersController')->only('store');
 
 Route::group(['middleware' => ['auth']], function () {
 
@@ -33,7 +33,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('alunos', 'AlunosController');
 
-    Route::resource('instituicoes', 'InstituicoesController');
+    Route::resource('minhas-instituicoes', 'InstituicoesController');
+    Route::get('minhas-instituicoes/universidades/{uf}', "InstituicoesController@getUniversidades");
+    Route::get('minhas-instituicoes/escolas/{uf}', "InstituicoesController@getEscolas");
 
     Route::resource('perguntas', 'PerguntasController');
 
@@ -41,10 +43,9 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::resource('testes', 'TestesController');
 
+    Route::resource('users', 'UsersController')->except('store');
     Route::post('password', 'UsersController@password')->name('users.password');
 
     Route::resource('turmas', 'TurmasController');
-    Route::get('turma/{turmaId}/alunos', 'TurmasController@getAlunosByTurma')->name('turmas.alunosByTurma');
-    Route::get('turma/{turmaId}/testes', 'TurmasController@getTestesByTurma')->name('turmas.testesByTurma');
 
 });

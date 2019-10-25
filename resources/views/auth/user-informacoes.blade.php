@@ -7,7 +7,8 @@
         <label class="form-control-label">
             Email:
         </label>
-        <input class="form-control" type="text" placeholder="Email" name="email" value="{{ Auth::user()->email }}" autofocus>
+        <input class="form-control" type="text" placeholder="Email" name="email" value="{{ Auth::user()->email }}"
+            autofocus>
     </div>
     <div class="col-lg-4 form-group-sub">
         <label class="form-control-label">
@@ -19,7 +20,7 @@
         <label class="form-control-label">
             Tipo:
         </label>
-        <select class="form-control" name="tipo" id="tipo">
+        <select class="form-control" name="tipo" id="tipo" disabled>
             <option value="Aluno">Aluno</option>
             <option value="Professor">Professor</option>
         </select>
