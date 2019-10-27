@@ -79,31 +79,49 @@ class InstituicoesController extends Controller
     public function store(InstituicoesCreateRequest $request)
     {
         try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $instituico = $this->repository->create($request->all());
-
+            $data = $request->all();
+            if ($data['tipo'] == "1") {
+                $instituicoes = $this->getEscolas($data['estado'], $data['municipio']);
+            } else if ($data['tipo'] == "2") {
+                $instituicoes = $this->getUniversidades($data['estado'], $data['municipio']);
+            }
+            foreach ($data['instituicoes'] as $key => $codigo) {
+                $instituicao = $instituicoes->firstWhere('codigo', $codigo);
+                if ($this->repository->all()->firstWhere('codigo', $codigo) == null) {
+                    $instituicao->save();
+                } else {
+                    $instituicao = $this->repository->all()->firstWhere('codigo', $codigo);
+                }
+                Auth::user()->instituicoes()->attach($instituicao->id);
+            }
             $response = [
-                'message' => 'Instituicoes created.',
-                'data' => $instituico->toArray(),
+                'success' => true,
+                'message' => 'Instituições atualizadas.',
+                'data' => Auth::user()->instituicoes->toArray(),
             ];
-
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error' => true,
-                    'message' => $e->getMessageBag(),
-                ]);
+            session()->flash('response', $response);
+            return redirect()->back();
+        } catch (\Exception $e) {
+            // If errors...
+            switch (get_class($e)) {
+                case ValidatorException::class:
+                    $message = $e->getMessageBag();
+                    break;
+                default:
+                    $message = $e->getMessage();
+                    break;
             }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
 
@@ -116,12 +134,12 @@ class InstituicoesController extends Controller
      */
     public function show($id)
     {
-        $instituico = $this->repository->find($id);
+        $instituicao = $this->repository->find($id);
 
         if (request()->wantsJson()) {
 
             return response()->json([
-                'data' => $instituico,
+                'data' => $instituicao,
             ]);
         }
 
@@ -208,9 +226,9 @@ class InstituicoesController extends Controller
     }
 
     /**
-     * Retorna as universidades por Estado
+     * Retorna as universidades por Estado e Município
      */
-    public function getUniversidades($uf)
+    public function getUniversidades($codigo_uf, $codigo_municipio)
     {
         $arquivo = "instituicoes/universidades.csv";
         $csv = file_get_contents($arquivo);
@@ -219,15 +237,22 @@ class InstituicoesController extends Controller
         $instituicoes_array = array();
         for ($i = 11; $i < 2376; $i++) {
             $linha_array = explode(";", $array[$i]);
-            $uf_ie = $linha_array["9"];
-            if ($uf_ie == $uf) {
+            $codigo_uf_ie = $linha_array["7"];
+            $codigo_municipio_ie = $linha_array["11"];
+            if ($codigo_uf_ie == $codigo_uf && $codigo_municipio == $codigo_municipio_ie) {
                 $codigo = $linha_array['1'];
                 $nome = $linha_array['2'];
                 $sigla = $linha_array['3'];
+                $cidade = $linha_array['10'];
                 $instituicao = new \App\Entities\Instituicoes;
                 $instituicao->codigo = $codigo;
                 $instituicao->nome = $nome;
-                $instituicao->sigla = $sigla;
+                $instituicao->cidade = $cidade;
+                if ($sigla !== "-") {
+                    $instituicao->sigla = $sigla;
+                } else {
+                    $instituicao->sigla = "";
+                }
                 array_push($instituicoes_array, $instituicao);
             }
         }
@@ -235,8 +260,72 @@ class InstituicoesController extends Controller
         return $instituicoes;
     }
 
-    public function getEscolas($uf)
+    /**
+     * Retorna o nome do arquivo que contém as escolas do estado fornecido
+     */
+    private function getNomeArquivoEscolaByEstado($codigo_uf)
     {
-        dd($uf);
+        if ($codigo_uf >= 11 && $codigo_uf <= 17) {
+            $regiao = "norte";
+        } else if (($codigo_uf >= 21 && $codigo_uf <= 25)) {
+            $regiao = "nordeste_1";
+        } else if (($codigo_uf >= 26 && $codigo_uf <= 29)) {
+            $regiao = "nordeste_2";
+        } else if (($codigo_uf == 31)) {
+            $regiao = "sudeste_2";
+        } else if (($codigo_uf == 32 || $codigo_uf == 33)) {
+            $regiao = "sudeste_1";
+        } else if (($codigo_uf == 35)) {
+            $regiao = "sudeste_3";
+        } else if (($codigo_uf >= 41 && $codigo_uf <= 43)) {
+            $regiao = "sul";
+        } else if (($codigo_uf >= 50 && $codigo_uf <= 52)) {
+            $regiao = "centro_oeste";
+        }
+        return "escolas_" . $regiao . ".csv";
+    }
+
+    /**
+     * Retorna as escolas por Estado e Município
+     */
+    public function getEscolas($codigo_uf, $codigo_municipio)
+    {
+        $arquivo = "instituicoes/" . $this->getNomeArquivoEscolaByEstado($codigo_uf);
+        $csv = file_get_contents($arquivo);
+        $array = explode("\n", $csv);
+        $array = array_map("utf8_encode", $array);
+        $instituicoes_array = array();
+        $ultimaLinha = sizeof($array) - 2;
+        for ($i = 12; $i < $ultimaLinha; $i++) {
+            $linha_array = explode(";", $array[$i]);
+            $codigo_uf_ie = $linha_array["9"];
+            $codigo_municipio_ie = $linha_array["12"];
+            if ($codigo_uf_ie == $codigo_uf && $codigo_municipio == $codigo_municipio_ie) {
+                $codigo = $linha_array['1'];
+                $nome = $linha_array['2'];
+                $cidade = $linha_array['11'];
+                $instituicao = new \App\Entities\Instituicoes;
+                $instituicao->codigo = $codigo;
+                $instituicao->nome = $nome;
+                $instituicao->cidade = $cidade;
+                array_push($instituicoes_array, $instituicao);
+            }
+        }
+        $instituicoes = collect($instituicoes_array);
+        return $instituicoes;
+    }
+
+    public function isInstituicaoAssociadaAoUsuario($codigo)
+    {
+        $instituicao = Auth::user()->instituicoes->firstWhere("codigo", $codigo);
+
+        if (request()->wantsJson()) {
+
+            return response()->json([
+                'data' => $instituicao,
+            ]);
+        }
+
+        return $instituicao;
     }
 }

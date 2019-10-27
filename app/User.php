@@ -25,7 +25,7 @@ class User extends Authenticatable implements Transformable
 
     public function instituicoes()
     {
-        return $this->belongsToMany('App\Entities\Instituicoes', 'instituicoes_users', 'instituicoes_id', 'users_id');
+        return $this->belongsToMany('App\Entities\Instituicoes', 'instituicoes_users', 'users_id', 'instituicoes_id');
     }
 
     public function resultados()
@@ -40,6 +40,6 @@ class User extends Authenticatable implements Transformable
 
     public function turmasAluno()
     {
-        return $this->belongsToMany('App\Entities\Turmas', 'turmas_users', 'turmas_id', 'users_id');
+        return $this->belongsToMany('App\Entities\Turmas', 'turmas_users', 'users_id', 'turmas_id');
     }
 }

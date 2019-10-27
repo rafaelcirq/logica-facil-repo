@@ -14,17 +14,17 @@ class CreateInstituicoesUsersTable extends Migration
     public function up()
     {
         Schema::create('instituicoes_users', function (Blueprint $table) {
-            $table->integer('users_id')->unsigned();
-            $table->foreign('users_id')
-                ->references('id')
-                ->on('users')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-
             $table->integer('instituicoes_id')->unsigned();
             $table->foreign('instituicoes_id')
                 ->references('id')
                 ->on('instituicoes')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+
+            $table->integer('users_id')->unsigned();
+            $table->foreign('users_id')
+                ->references('id')
+                ->on('users')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 

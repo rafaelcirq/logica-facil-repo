@@ -34,8 +34,9 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('alunos', 'AlunosController');
 
     Route::resource('minhas-instituicoes', 'InstituicoesController');
-    Route::get('minhas-instituicoes/universidades/{uf}', "InstituicoesController@getUniversidades");
-    Route::get('minhas-instituicoes/escolas/{uf}', "InstituicoesController@getEscolas");
+    Route::get('minhas-instituicoes/universidades/{uf}/{municipio}', "InstituicoesController@getUniversidades");
+    Route::get('minhas-instituicoes/escolas/{uf}/{municipio}', "InstituicoesController@getEscolas");
+    Route::get('minhas-instituicoes/is-instituicao-associada-ao-usuario/{instituicao}', "InstituicoesController@isInstituicaoAssociadaAoUsuario");
 
     Route::resource('perguntas', 'PerguntasController');
 

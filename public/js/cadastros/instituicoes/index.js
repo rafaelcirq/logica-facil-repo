@@ -11,7 +11,7 @@ var InstituicoesIndex = function() {
                 source: {
                     read: {
                         method: 'GET',
-                        url: 'instituicoes',
+                        url: 'minhas-instituicoes',
                         map: function(raw) {
                             var dataSet = raw;
 
@@ -61,8 +61,7 @@ var InstituicoesIndex = function() {
             columns: [{
                 field: 'sigla',
                 title: 'Sigla',
-                textAlign: 'center',
-                width: 40,
+                textAlign: 'center'
             }, {
                 field: 'nome',
                 title: 'Nome',

@@ -17,8 +17,9 @@ class CreateInstituicoesTable extends Migration
             $table->increments('id');
 
             $table->string('nome');
-            $table->string('sigla');
+            $table->string('sigla')->nullable();
             $table->string('codigo')->unique();
+            $table->string('cidade');
 
             $table->timestamps();
         });
