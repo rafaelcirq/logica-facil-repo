@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\TurmasCreateRequest;
 use App\Http\Requests\TurmasUpdateRequest;
+use App\Presenters\TurmasPresenter;
 use App\Repositories\TurmasRepository;
 use App\Validators\TurmasValidator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Prettus\Validator\Contracts\ValidatorInterface;
+use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
  * Class TurmasController.
@@ -29,16 +29,19 @@ class TurmasController extends Controller
      */
     protected $validator;
 
+    // use Helpers;
+
     /**
      * TurmasController constructor.
      *
      * @param TurmasRepository $repository
+     * @param UserRepository $userRepository
      * @param TurmasValidator $validator
      */
     public function __construct(TurmasRepository $repository, TurmasValidator $validator)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
+        $this->validator = $validator;
     }
 
     /**
@@ -49,16 +52,34 @@ class TurmasController extends Controller
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $turmas = $this->repository->all();
 
-        if (request()->wantsJson()) {
+        $this->repository->setPresenter(TurmasPresenter::class);
 
-            return response()->json([
-                'data' => $turmas,
-            ]);
+        if (Auth::user()->tipo == "Aluno") {
+            $turmas = Auth::user()->turmasAluno;
+        } else if (Auth::user()->tipo == "Professor") {
+            $turmas = Auth::user()->turmasProfessor;
         }
 
-        return view('turmas.index', compact('turmas'));
+        foreach ($turmas as $key => $turma) {
+            $turma['professor'] = $turma->professor;
+            $turma['instituicao'] = $turma->instituicao;
+        }
+
+        if (request()->wantsJson()) {
+            return $turmas;
+        }
+
+        return view('cadastros.turmas.index', compact('turmas'));
+    }
+
+    public function create()
+    {
+        if(Auth::user()->tipo == "Professor") {
+            return view('cadastros.turmas.create');
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -80,7 +101,7 @@ class TurmasController extends Controller
 
             $response = [
                 'message' => 'Turmas created.',
-                'data'    => $turma->toArray(),
+                'data' => $turma->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -92,8 +113,8 @@ class TurmasController extends Controller
         } catch (ValidatorException $e) {
             if ($request->wantsJson()) {
                 return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
+                    'error' => true,
+                    'message' => $e->getMessageBag(),
                 ]);
             }
 
@@ -156,7 +177,7 @@ class TurmasController extends Controller
 
             $response = [
                 'message' => 'Turmas updated.',
-                'data'    => $turma->toArray(),
+                'data' => $turma->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -170,15 +191,14 @@ class TurmasController extends Controller
             if ($request->wantsJson()) {
 
                 return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
+                    'error' => true,
+                    'message' => $e->getMessageBag(),
                 ]);
             }
 
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

@@ -2,8 +2,8 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Entities\Turmas;
+use League\Fractal\TransformerAbstract;
 
 /**
  * Class TurmasTransformer.
@@ -12,6 +12,8 @@ use App\Entities\Turmas;
  */
 class TurmasTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = ['professor', 'instituicao'];
+
     /**
      * Transform the Turmas entity.
      *
@@ -22,12 +24,27 @@ class TurmasTransformer extends TransformerAbstract
     public function transform(Turmas $model)
     {
         return [
-            'id'         => (int) $model->id,
+            'id' => (int) $model->id,
 
-            /* place your other model properties here */
+            'nome' => $model->nome,
 
             'created_at' => $model->created_at,
-            'updated_at' => $model->updated_at
+            'updated_at' => $model->updated_at,
         ];
+    }
+
+    public function includeAlunos(Turmas $model)
+    {
+        return $this->collection($model->alunos, new AlunosTransformer());
+    }
+
+    public function includeInstituicao(Turmas $model)
+    {
+        return $this->item($model->instituicao, new InstituicoesTransformer());
+    }
+
+    public function includeProfessor(Turmas $model)
+    {
+        return $this->item($model->professor, new UserTransformer());
     }
 }
