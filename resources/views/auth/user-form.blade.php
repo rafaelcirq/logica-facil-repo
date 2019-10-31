@@ -13,7 +13,7 @@
         <input class="form-control" type="text" placeholder="Email" name="email" autocomplete="off">
     </div>
     <div class="col-lg-12">
-        <input class="form-control" type="text" placeholder="Nome" name="name" autocomplete="off">
+        <input class="form-control" type="text" placeholder="Nome Completo" name="name" autocomplete="off">
     </div>
     <div class="col-lg-12">
         <input class="form-control" type="password" placeholder="Senha" id="password" name="password">

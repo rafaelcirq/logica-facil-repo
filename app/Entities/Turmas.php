@@ -20,7 +20,7 @@ class Turmas extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = ['nome'];
+    protected $fillable = ['nome', 'instituicoes_id', 'users_id'];
 
     protected $with = array('professor');
 

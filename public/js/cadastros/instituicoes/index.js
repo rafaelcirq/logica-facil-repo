@@ -67,6 +67,10 @@ var InstituicoesIndex = function() {
                 title: 'Nome',
                 textAlign: 'center',
             }, {
+                field: 'cidade',
+                title: 'Cidade',
+                textAlign: 'center',
+            }, {
                 field: 'Actions',
                 title: 'Ações',
                 sortable: false,

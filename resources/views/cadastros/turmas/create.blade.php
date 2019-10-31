@@ -1,7 +1,7 @@
 @extends('layouts.base')
 
 @section('importar')
-<script src="{{ asset('js/cadastros/turmas/index.js') }}"></script>
+<script src="{{ asset('js/cadastros/turmas/form.js') }}"></script>
 @endsection
 
 @section('titulo')

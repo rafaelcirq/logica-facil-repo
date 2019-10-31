@@ -18,7 +18,15 @@ class TurmasValidator extends LaravelValidator
      * @var array
      */
     protected $rules = [
-        ValidatorInterface::RULE_CREATE => [],
-        ValidatorInterface::RULE_UPDATE => [],
+        ValidatorInterface::RULE_CREATE => [
+            'nome' => 'required|max:255',
+            'users_id' => 'required',
+            'instituicoes_id' => 'required',
+        ],
+        ValidatorInterface::RULE_UPDATE => [
+            'nome' => 'required|max:255',
+            'users_id' => 'required',
+            'instituicoes_id' => 'required',
+        ],
     ];
 }

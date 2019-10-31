@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TurmasCreateRequest;
 use App\Http\Requests\TurmasUpdateRequest;
 use App\Presenters\TurmasPresenter;
+use App\Presenters\InstituicoesPresenter;
 use App\Repositories\TurmasRepository;
+use App\Repositories\InstituicoesRepository;
 use App\Validators\TurmasValidator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,6 +31,11 @@ class TurmasController extends Controller
      */
     protected $validator;
 
+    /**
+     * @var InstituicoesRepository
+     */
+    protected $instituicoesRepository;
+
     // use Helpers;
 
     /**
@@ -38,10 +45,12 @@ class TurmasController extends Controller
      * @param UserRepository $userRepository
      * @param TurmasValidator $validator
      */
-    public function __construct(TurmasRepository $repository, TurmasValidator $validator)
+    public function __construct(TurmasRepository $repository, InstituicoesRepository $instituicoesRepository, TurmasValidator $validator)
     {
         $this->repository = $repository;
         $this->validator = $validator;
+
+        $this->instituicoesRepository = $instituicoesRepository;
     }
 
     /**
@@ -75,8 +84,9 @@ class TurmasController extends Controller
 
     public function create()
     {
+        $instituicoes = Auth::user()->instituicoes->sortBy('nome');
         if(Auth::user()->tipo == "Professor") {
-            return view('cadastros.turmas.create');
+            return view('cadastros.turmas.create', compact('instituicoes'));
         } else {
             return null;
         }
@@ -94,31 +104,43 @@ class TurmasController extends Controller
     public function store(TurmasCreateRequest $request)
     {
         try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $turma = $this->repository->create($request->all());
+            $data = $request->all();
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
+            $turma = $this->repository->create($data);
+            
+            foreach ($data['alunos'] as $key => $idAluno) {
+                $turma->alunos()->attach($idAluno);
+            }
 
             $response = [
-                'message' => 'Turmas created.',
+                'success' => true,
+                'message' => 'Turma criada.',
                 'data' => $turma->toArray(),
             ];
-
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error' => true,
-                    'message' => $e->getMessageBag(),
-                ]);
+            session()->flash('response', $response);
+            return redirect()->back();
+        } catch (\Exception $e) {
+            // If errors...
+            switch (get_class($e)) {
+                case ValidatorException::class:
+                    $message = $e->getMessageBag();
+                    break;
+                default:
+                    $message = $e->getMessage();
+                    break;
             }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+            dd($response);
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
 
@@ -220,5 +242,11 @@ class TurmasController extends Controller
         }
 
         return redirect()->back()->with('message', 'Turmas deleted.');
+    }
+
+    public function getAlunos($id)
+    {
+        $instituicao = $this->instituicoesRepository->find($id);
+        return $instituicao->usuarios->where('tipo', 'Aluno');
     }
 }

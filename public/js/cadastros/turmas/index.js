@@ -80,7 +80,13 @@ var TurmasIndex = function() {
                 textAlign: 'center',
                 template: function(row) {
                     return '\
-                    <a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Remover">\
+                    <a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Editar">\
+                        <i class="la la-edit"></i>\
+                    </a>\
+                    <a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Detalhes">\
+                        <i class="la la-eye"></i>\
+                    </a>\
+                    <a href="javascript:;" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Excluir">\
                         <i class="la la-trash"></i>\
                     </a>\
                 ';

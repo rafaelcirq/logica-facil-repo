@@ -24,7 +24,10 @@ class InstituicoesTransformer extends TransformerAbstract
         return [
             'id'         => (int) $model->id,
 
-            /* place your other model properties here */
+            'nome'      => $model->nome,
+            'sigla'     => $model->sigla,
+            'cidade'    => $model->cidade,
+            'codigo'    => $model->codigo,
 
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at
