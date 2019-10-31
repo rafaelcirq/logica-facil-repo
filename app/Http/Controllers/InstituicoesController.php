@@ -212,17 +212,18 @@ class InstituicoesController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+        $removed = Auth::user()->instituicoes()->detach($id);
+
+        $response = [
+            'success' => true,
+            'message' => 'Turma removida.',
+        ];
 
         if (request()->wantsJson()) {
-
-            return response()->json([
-                'message' => 'Instituicoes deleted.',
-                'deleted' => $deleted,
-            ]);
+            return response()->json($response);
         }
 
-        return redirect()->back()->with('message', 'Instituicoes deleted.');
+        return redirect()->back()->with('message', 'Instituição removida.');
     }
 
     /**

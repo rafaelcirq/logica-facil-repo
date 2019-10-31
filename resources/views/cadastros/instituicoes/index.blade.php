@@ -42,4 +42,13 @@ Listagem
 
 <!--begin: Datatable -->
 <div class="kt-datatable" id="instituicoes_datatable"></div>
+
+<div id="rel_delete_forms">
+    @foreach($instituicoes as $instituicao)
+    {{ Form::open(['method' => 'DELETE', 'id' => "delete_form_".$instituicao->id, 'route' => ['minhas-instituicoes.destroy', $instituicao->id]]) }}
+    @csrf
+    {{-- <button>delete {{ $instituicao->nome }}</button> --}}
+    {{ Form::close() }}
+    @endforeach
+</div>
 @endsection
