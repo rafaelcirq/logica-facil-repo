@@ -12,6 +12,7 @@
                 @endif{{ $instituicao->nome }}</option>
             @endforeach
         </select>
+        <label for="instituicoes_id" class="invalid-feedback error" generated="true">Defina a instituicao a qual a turma pertencerá.</label>
     </div>
     <div class="col-lg-6 form-group-sub">
         <label class="form-control-label">
