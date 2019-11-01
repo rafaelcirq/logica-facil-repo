@@ -20,7 +20,7 @@ class Testes extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['turmas_id', 'nome', 'data_inicio', 'data_limite', 'valor'];
 
     public function perguntas()
     {

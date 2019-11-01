@@ -88,7 +88,7 @@ class TurmasController extends Controller
         if(Auth::user()->tipo == "Professor") {
             return view('cadastros.turmas.create', compact('instituicoes'));
         } else {
-            return null;
+            abort(403, 'Unauthorized action.');
         }
     }
 
@@ -108,8 +108,8 @@ class TurmasController extends Controller
             $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
             $turma = $this->repository->create($data);
             
-            foreach ($data['alunos'] as $key => $idAluno) {
-                $turma->alunos()->attach($idAluno);
+            if(isset($data['alunos'])) {
+                $turma->alunos()->sync($data['alunos']);
             }
 
             $response = [
@@ -139,7 +139,6 @@ class TurmasController extends Controller
             if ($request->wantsJson()) {
                 return response()->json($response);
             }
-            dd($response);
             return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
@@ -154,6 +153,7 @@ class TurmasController extends Controller
     public function show($id)
     {
         $turma = $this->repository->find($id);
+        $testes = $this->getTestes($id);
 
         if (request()->wantsJson()) {
 
@@ -162,7 +162,12 @@ class TurmasController extends Controller
             ]);
         }
 
-        return view('turmas.show', compact('turma'));
+        if(Auth::user()->tipo == "Professor") {
+            $alunos = $this->getAlunos($id);
+            return view('cadastros.turmas.show-professor', compact('turma', 'testes', 'alunos'));
+        } else if(Auth::user()->tipo == "Aluno") {
+            return view('cadastros.turmas.show-aluno', compact('turma', 'testes'));
+        }
     }
 
     /**
@@ -176,7 +181,9 @@ class TurmasController extends Controller
     {
         $turma = $this->repository->find($id);
 
-        return view('turmas.edit', compact('turma'));
+        $instituicoes = Auth::user()->instituicoes->sortBy('nome');
+
+        return view('cadastros.turmas.edit', compact('turma', 'instituicoes'));
     }
 
     /**
@@ -192,33 +199,42 @@ class TurmasController extends Controller
     public function update(TurmasUpdateRequest $request, $id)
     {
         try {
-
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $turma = $this->repository->update($request->all(), $id);
+            $data = $request->all();
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
+            $turma = $this->repository->update($data, $id);
+            
+            if(isset($data['alunos'])) {
+                $turma->alunos()->sync($data['alunos']);
+            }
 
             $response = [
-                'message' => 'Turmas updated.',
+                'success' => true,
+                'message' => 'Turma alterada.',
                 'data' => $turma->toArray(),
             ];
-
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-
-            if ($request->wantsJson()) {
-
-                return response()->json([
-                    'error' => true,
-                    'message' => $e->getMessageBag(),
-                ]);
+            session()->flash('response', $response);
+            return redirect()->back();
+        } catch (\Exception $e) {
+            // If errors...
+            switch (get_class($e)) {
+                case ValidatorException::class:
+                    $message = $e->getMessageBag();
+                    break;
+                default:
+                    $message = $e->getMessage();
+                    break;
             }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
     }
 
@@ -231,22 +247,56 @@ class TurmasController extends Controller
      */
     public function destroy($id)
     {
-        $deleted = $this->repository->delete($id);
+        try 
+        {
+            $deleted = $this->repository->delete($id);
 
-        if (request()->wantsJson()) {
+            $response = [
+                'success' => true,
+                'message' => 'Turma excluída.',
+                'data'    => $deleted,
+            ];
 
-            return response()->json([
-                'message' => 'Turmas deleted.',
-                'deleted' => $deleted,
-            ]);
+            if (request()->wantsJson()) {
+                return response()->json($response);
+            }
+
+            session()->flash('response', $response);
+
+            return redirect()->back();
         }
+        catch (\Exception $e) 
+        {        
+            $message = $e->getMessage();
 
-        return redirect()->back()->with('message', 'Turmas deleted.');
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+
+            if (request()->wantsJson()) {
+                return response()->json($response);
+            }
+
+            return redirect()->back()->withErrors($response['message'])->withInput();
+        }
     }
 
+    /**
+     * Retorna os alunos de uma determinada turma
+     */
     public function getAlunos($id)
     {
-        $instituicao = $this->instituicoesRepository->find($id);
-        return $instituicao->usuarios->where('tipo', 'Aluno');
+        $turma = $this->repository->find($id);
+        return $turma->alunos;
+    }
+
+    /**
+     * Retorna os testes de uma determinada turma
+     */
+    public function getTestes($id)
+    {
+        $turma = $this->repository->find($id);
+        return $turma->testes;
     }
 }

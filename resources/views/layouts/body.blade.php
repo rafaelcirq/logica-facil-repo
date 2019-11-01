@@ -97,7 +97,8 @@
 <!--begin::Global Theme Bundle(used by all pages) -->
 
 <!--begin:: Vendor Plugins -->
-<script src="assets/plugins/general/jquery/dist/jquery.js" type="text/javascript"></script>
+{{-- <script src="assets/plugins/general/jquery/dist/jquery.js" type="text/javascript"></script> --}}
+<script src="{{ asset('js/load.js') }}"></script>
 <script src="assets/plugins/general/popper.js/dist/umd/popper.js" type="text/javascript"></script>
 <script src="assets/plugins/general/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="assets/plugins/general/js-cookie/src/js.cookie.js" type="text/javascript"></script>
@@ -177,7 +178,7 @@
 <script src="assets/plugins/general/dompurify/dist/purify.js" type="text/javascript"></script>
 
 <!--end:: Vendor Plugins -->
-<script src="assets/js/scripts.bundle.js" type="text/javascript"></script>
+{{-- <script src="assets/js/scripts.bundle.js" type="text/javascript"></script> --}}
 
 <!--begin:: Vendor Plugins for custom pages -->
 <script src="assets/plugins/custom/plugins/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>

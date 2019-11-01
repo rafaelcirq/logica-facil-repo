@@ -41,8 +41,8 @@
     <div class="col-lg-6 form-group-sub" style="text-align: center;">
         <img src="/imagens/monitor.png" width="50%">
         <div id="resultado" style="position: relative;
-        margin-top: -46%;
-        font-size: 220%;
+        margin-top: -43%;
+        font-size: 530%;
         width: 40%;
         margin-left: 30%;"></div>
     </div>

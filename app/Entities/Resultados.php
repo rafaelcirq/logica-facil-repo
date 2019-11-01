@@ -20,7 +20,7 @@ class Resultados extends Model implements Transformable
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['testes_id', 'users_id', 'nota'];
 
     public function teste()
     {

@@ -1,17 +1,17 @@
 "use strict";
 
-var TurmasIndex = function() {
+var ProfessorTestes = function() {
 
-    var datatableTurmas = function() {
-
-        var datatable = $('#turmas_datatable').KTDatatable({
+    var datatableTestes = function() {
+        var id = $("#turma_id").val();
+        var datatable = $('#professor_testes_datatable').KTDatatable({
             // datasource definition
             data: {
                 type: 'remote',
                 source: {
                     read: {
                         method: 'GET',
-                        url: 'turmas',
+                        url: 'turmas/' + id + '/testes',
                         map: function(raw) {
                             var dataSet = raw;
 
@@ -53,7 +53,7 @@ var TurmasIndex = function() {
                     }
                 },
                 records: {
-                    noRecords: 'Você ainda não faz parte de nenhuma turma.'
+                    noRecords: 'Ainda não há testes para esta turma.'
                 }
             },
 
@@ -63,12 +63,16 @@ var TurmasIndex = function() {
                 title: 'Nome',
                 textAlign: 'center'
             }, {
-                field: 'instituicao.nome',
-                title: 'Instituição',
+                field: 'data_inicio',
+                title: 'Data Início',
                 textAlign: 'center',
             }, {
-                field: 'professor.name',
-                title: 'Professor',
+                field: 'data_limite',
+                title: 'Data Limite',
+                textAlign: 'center',
+            }, {
+                field: 'valor',
+                title: 'Valor',
                 textAlign: 'center',
             }, {
                 field: 'Actions',
@@ -79,16 +83,12 @@ var TurmasIndex = function() {
                 overflow: 'visible',
                 textAlign: 'center',
                 template: function(row, index, professor) {
-                    var tipo = $("#user-tipo").val();
-                    var display = tipo === "Professor" ? "unset" : "none";
+                    var idTurma = $("#turma_id").val();
                     return '\
-                    <a href="turmas/' + row.id + '/edit" style="display: ' + display + ';" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Editar">\
-                        <i class="la la-edit"></i>\
-                    </a>\
-                    <a href="turmas/' + row.id + '" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Detalhes">\
+                    <a href="testes/' + row.id + '" class="btn btn-sm btn-clean btn-icon btn-icon-md" title="Detalhes">\
                         <i class="la la-eye"></i>\
                     </a>\
-                    <a href="javascript:;" style="display: ' + display + ';" data-id="' + row.id + '" row-index="' + index + '" class="btn btn-sm btn-clean btn-icon btn-icon-md m_sweetalert_delete" title="Excluir">\
+                    <a href="javascript:;" data-id="' + row.id + '" row-index="' + index + '" class="btn btn-sm btn-clean btn-icon btn-icon-md m_sweetalert_delete" title="Excluir">\
                         <i class="la la-trash"></i>\
                     </a>\
                 ';
@@ -151,11 +151,11 @@ var TurmasIndex = function() {
     return {
         // public functions
         init: function() {
-            datatableTurmas();
+            datatableTestes();
         }
     };
 }();
 
 jQuery(document).ready(function() {
-    TurmasIndex.init();
+    ProfessorTestes.init();
 });

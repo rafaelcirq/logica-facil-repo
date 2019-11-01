@@ -2,8 +2,8 @@
 
 namespace App\Transformers;
 
-use League\Fractal\TransformerAbstract;
 use App\Entities\Testes;
+use League\Fractal\TransformerAbstract;
 
 /**
  * Class TestesTransformer.
@@ -12,6 +12,8 @@ use App\Entities\Testes;
  */
 class TestesTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = ['perguntas'];
+
     /**
      * Transform the Testes entity.
      *
@@ -22,12 +24,19 @@ class TestesTransformer extends TransformerAbstract
     public function transform(Testes $model)
     {
         return [
-            'id'         => (int) $model->id,
+            'id' => (int) $model->id,
 
-            /* place your other model properties here */
+            'nome' => $model->nome,
+            'data_inicio' => $model->data_inicio,
+            'data_limite' => $model->data_limite,
+            'valor' => $model->valor,
 
             'created_at' => $model->created_at,
-            'updated_at' => $model->updated_at
+            'updated_at' => $model->updated_at,
         ];
+    }
+
+    public function includePerguntas(Testes $model) {
+        return $this->collection($model->perguntas, new PerguntasTransformer());
     }
 }

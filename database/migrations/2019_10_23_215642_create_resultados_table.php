@@ -14,7 +14,6 @@ class CreateResultadosTable extends Migration
     public function up()
     {
         Schema::create('resultados', function (Blueprint $table) {
-            $table->increments('id');
 
             $table->integer('testes_id')->unsigned();
             $table->foreign('testes_id')
@@ -31,6 +30,8 @@ class CreateResultadosTable extends Migration
                 ->onDelete('cascade');
 
             $table->decimal('nota', 4, 2);
+
+            $table->primary(['testes_id', 'users_id']);
 
             $table->timestamps();
         });

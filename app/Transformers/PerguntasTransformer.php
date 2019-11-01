@@ -12,6 +12,8 @@ use App\Entities\Perguntas;
  */
 class PerguntasTransformer extends TransformerAbstract
 {
+    protected $defaultIncludes = ['alternativas'];
+
     /**
      * Transform the Perguntas entity.
      *
@@ -24,10 +26,15 @@ class PerguntasTransformer extends TransformerAbstract
         return [
             'id'         => (int) $model->id,
 
-            /* place your other model properties here */
+            'texto' => $model->texto,
+            'valor' => $model->valor,
 
             'created_at' => $model->created_at,
             'updated_at' => $model->updated_at
         ];
+    }
+
+    public function includeAlternativas(Perguntas $model) {
+        return $this->collection($model->alternativas, new AlternativasTransformer());
     }
 }

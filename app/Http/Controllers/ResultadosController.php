@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use Prettus\Validator\Contracts\ValidatorInterface;
-use Prettus\Validator\Exceptions\ValidatorException;
 use App\Http\Requests\ResultadosCreateRequest;
 use App\Http\Requests\ResultadosUpdateRequest;
 use App\Repositories\ResultadosRepository;
 use App\Validators\ResultadosValidator;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Prettus\Validator\Contracts\ValidatorInterface;
+use Prettus\Validator\Exceptions\ValidatorException;
 
 /**
  * Class ResultadosController.
@@ -38,7 +37,7 @@ class ResultadosController extends Controller
     public function __construct(ResultadosRepository $repository, ResultadosValidator $validator)
     {
         $this->repository = $repository;
-        $this->validator  = $validator;
+        $this->validator = $validator;
     }
 
     /**
@@ -73,32 +72,56 @@ class ResultadosController extends Controller
     public function store(ResultadosCreateRequest $request)
     {
         try {
+            $data = $request->all();
+            $data['users_id'] = Auth::id();
+            $data['nota'] = $this->getNota($data['respostas'], $data['testes_id']);
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
-
-            $resultado = $this->repository->create($request->all());
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
+            $resultado = $this->repository->create($data);
 
             $response = [
-                'message' => 'Resultados created.',
-                'data'    => $resultado->toArray(),
+                'success' => true,
+                'message' => 'Respostas enviadas.',
+                'data' => $resultado->toArray(),
             ];
-
             if ($request->wantsJson()) {
-
                 return response()->json($response);
             }
-
-            return redirect()->back()->with('message', $response['message']);
-        } catch (ValidatorException $e) {
-            if ($request->wantsJson()) {
-                return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
-                ]);
+            session()->flash('response', $response);
+            return redirect()->back();
+        } catch (\Exception $e) {
+            // If errors...
+            switch (get_class($e)) {
+                case ValidatorException::class:
+                    $message = $e->getMessageBag();
+                    break;
+                default:
+                    $message = $e->getMessage();
+                    break;
             }
-
-            return redirect()->back()->withErrors($e->getMessageBag())->withInput();
+            $response = [
+                'success' => false,
+                'message' => $message,
+            ];
+            if ($request->wantsJson()) {
+                return response()->json($response);
+            }
+            return redirect()->back()->withErrors($response['message'])->withInput();
         }
+    }
+
+    private function getNota($data, $idTeste) {
+        $teste = \App\Entities\Testes::find($idTeste);
+        $nota = $teste->valor;
+        foreach ($data as $key => $resposta) {
+            $pergunta = \App\Entities\Perguntas::find($key);
+            $alternativaCorreta = $pergunta->alternativas->where('is_correta', true)->first()->id;
+            if($resposta != $alternativaCorreta) {
+                $nota = $nota - $pergunta->valor;
+            }
+        }
+        if($nota > 0) return $nota;
+        else return 0;
     }
 
     /**
@@ -156,7 +179,7 @@ class ResultadosController extends Controller
 
             $response = [
                 'message' => 'Resultados updated.',
-                'data'    => $resultado->toArray(),
+                'data' => $resultado->toArray(),
             ];
 
             if ($request->wantsJson()) {
@@ -170,15 +193,14 @@ class ResultadosController extends Controller
             if ($request->wantsJson()) {
 
                 return response()->json([
-                    'error'   => true,
-                    'message' => $e->getMessageBag()
+                    'error' => true,
+                    'message' => $e->getMessageBag(),
                 ]);
             }
 
             return redirect()->back()->withErrors($e->getMessageBag())->withInput();
         }
     }
-
 
     /**
      * Remove the specified resource from storage.

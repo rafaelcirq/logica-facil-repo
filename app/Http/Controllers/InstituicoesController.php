@@ -212,6 +212,20 @@ class InstituicoesController extends Controller
      */
     public function destroy($id)
     {
+        if (Auth::user()->tipo == "Aluno") {
+            $turmas = $this->repository->find($id)->turmas;
+            foreach ($turmas as $key => $turma) {
+                $turma->alunos()->detach(Auth::id());
+            }
+        } else if (Auth::user()->tipo == "Professor") {
+            $turmas = Auth::user()->turmasProfessor;
+            foreach ($turmas as $key => $turma) {
+                if ($turma->professor->id == Auth::id()) {
+                    $turma->delete();
+                }
+            }
+        }
+
         $removed = Auth::user()->instituicoes()->detach($id);
 
         $response = [
@@ -328,5 +342,11 @@ class InstituicoesController extends Controller
         }
 
         return $instituicao;
+    }
+
+    public function getAlunos($id)
+    {
+        $instituicao = $this->repository->find($id);
+        return $instituicao->usuarios->where('tipo', 'Aluno');
     }
 }

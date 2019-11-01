@@ -3,9 +3,7 @@
 var InstituicoesIndex = function() {
 
     var datatableInstituicoes = function() {
-
         var datatable = $('#instituicoes_datatable').KTDatatable({
-            // datasource definition
             data: {
                 type: 'remote',
                 source: {
@@ -29,13 +27,11 @@ var InstituicoesIndex = function() {
                 serverSorting: false,
             },
 
-            // layout definition
             layout: {
                 scroll: false, // enable/disable datatable scroll both horizontal and vertical when needed.
                 footer: false // display/hide footer
             },
 
-            // column sorting
             sortable: true,
 
             pagination: true,
@@ -57,7 +53,6 @@ var InstituicoesIndex = function() {
                 }
             },
 
-            // columns definition
             columns: [{
                 field: 'sigla',
                 title: 'Sigla',
@@ -90,7 +85,6 @@ var InstituicoesIndex = function() {
         });
 
         $(document).on('click', '.m_sweetalert_delete', function() {
-            // e.preventDefault();
             var id = $(this).attr("data-id");
             var index = $(this).attr("row-index");
             deleteData(id, index, datatable);
@@ -98,10 +92,9 @@ var InstituicoesIndex = function() {
     };
 
     var deleteData = function(id, index, datatable) {
-
         swal.fire({
-            "title": "Deseja realmente excluir?",
-            "text": "Após excluído, você não poderá reverter isso!",
+            "title": "Deseja realmente remover esta instituição?",
+            "text": "Podem haver turmas relacionadas a ela!",
             "type": "warning",
             "showCancelButton": "true",
             "confirmButtonText": "Confirmar",
@@ -115,18 +108,13 @@ var InstituicoesIndex = function() {
                 var formAction = form.attr('action');
                 var formData = form.serializeArray();
 
-                // Ajax post data to server.
                 $.post(formAction, formData, function(response) {
 
-                    // console.log(response);
                     KTApp.unblockPage();
 
                     if (response.success) {
 
-                        // Removing the row
-                        // console.log(datatable.row('[data-row="' + index + '"]'));
-                        datatable.row('[data-row="' + index + '"]').remove();
-                        // $('.m_datatable').mDatatable('reload');
+                        datatable.reload();
 
                         swal.fire({
                             'type': 'success',

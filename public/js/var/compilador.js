@@ -84,7 +84,7 @@ var Compilador = function() {
                 return conteudo;
             }
         }
-        return "Não foi possível compilar!";
+        return "ERRO!";
     }
 
     var escrever = function(comando) {
@@ -93,7 +93,7 @@ var Compilador = function() {
             var conteudo = getConteudoEscreva(escreva);
             return calcular(conteudo);
         } else {
-            exibirMensagem("Não foi possível compilar!");
+            exibirMensagem("ERRO!");
         }
     }
 
@@ -109,17 +109,17 @@ var Compilador = function() {
         if (envelopeExiste(envelope)) {
             conteudo = calcular(conteudo);
             setValorByCompilador(envelope, conteudo);
-            return "Compilação concluída!";
+            return "OK!";
         }
 
-        return "Não foi possível compilar!";
+        return "ERRO!";
     }
 
     // compilador
 
     var compilar = function(comando) {
         var palavras = getPalavrasSeparadas(comando);
-        var conteudo = "Não foi possível compilar!";
+        var conteudo = "ERRO!";
         if (palavras[0] === "escreva") {
             conteudo = escrever(comando);
         } else if (palavras[1] === "=") {

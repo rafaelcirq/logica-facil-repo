@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAlternativasResultadosTable extends Migration
+class CreatePerguntasUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,8 @@ class CreateAlternativasResultadosTable extends Migration
      */
     public function up()
     {
-        Schema::create('alternativas_resultados', function (Blueprint $table) {
+        Schema::create('perguntas_users', function (Blueprint $table) {
+
             $table->integer('alternativas_id')->unsigned();
             $table->foreign('alternativas_id')
                 ->references('id')
@@ -21,16 +22,21 @@ class CreateAlternativasResultadosTable extends Migration
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->integer('resultados_id')->unsigned();
-            $table->foreign('resultados_id')
+            $table->integer('perguntas_id')->unsigned();
+            $table->foreign('perguntas_id')
                 ->references('id')
-                ->on('resultados')
+                ->on('perguntas')
                 ->onUpdate('cascade')
                 ->onDelete('cascade');
 
-            $table->boolean('is_escolhida');
+            $table->integer('users_id')->unsigned();
+            $table->foreign('users_id')
+                ->references('id')
+                ->on('users')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
 
-            $table->primary(['alternativas_id', 'resultados_id']);
+            $table->primary(['perguntas_id', 'users_id']);
         });
     }
 
@@ -41,6 +47,6 @@ class CreateAlternativasResultadosTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alternativas_resultados');
+        Schema::dropIfExists('perguntas_users');
     }
 }

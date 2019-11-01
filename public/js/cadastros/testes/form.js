@@ -1,65 +1,40 @@
 "use strict";
 
-var TurmasForm = function() {
+var TestesForm = function() {
 
-    var select2 = function() {
-        $('.kt-select2').select2({
-
-        });
-    }
-
-    var setAlunos = function() {
-        var instituicao = $('#instituicoes_id').val();
-        if (instituicao) {
-            $.ajax({
-                url: "/minhas-instituicoes/" + instituicao + "/alunos",
-                success: function(data) {
-                    $('#alunos').empty();
-                    jQuery.each(data, function(index, aluno) {
-                        var select = selectAlunos(aluno.id);
-                        $('#alunos').append(
-                            `<option value="${aluno.id}" ${select}> 
-                                ${aluno.name} 
-                            </option>`);
-                    });
-                }
-            });
-        }
-    }
-
-    var selectAlunos = function(alunoId) {
-        var resultado = $("#aluno_turma_" + alunoId).val();
-        if (resultado === "true") {
-            console.log("selected");
-            return "selected";
-        } else {
-            return "";
-        }
-    }
-
-    var onInstituicaoChange = function() {
-        $("#instituicoes_id").change(function() {
-            setAlunos();
-        });
+    var mask = function() {
+        $("#valor").mask('00.00');
     }
 
     var validar = function() {
-        var form = $("#turmas_form");
+        var form = $("#testes_form");
         form.validate({
             rules: {
-                instituicoes_id: {
+                nome: {
                     required: true
                 },
-                nome: {
+                valor: {
+                    required: true
+                },
+                data_inicio: {
+                    required: true
+                },
+                data_limite: {
                     required: true
                 }
             },
             messages: {
-                "instituicoes_id": {
-                    required: "Defina a instituição.",
-                },
                 "nome": {
-                    required: "Defina o nome da instituição.",
+                    required: "Defina um nome para o teste."
+                },
+                "valor": {
+                    required: "Defina o valor do teste."
+                },
+                "data_inicio": {
+                    required: "Defina uma data para o início do teste."
+                },
+                "data_limite": {
+                    required: "Defina uma data limite para o teste."
                 }
             },
             submitHandler: function(form) {
@@ -86,12 +61,13 @@ var TurmasForm = function() {
             },
             success: function(response, status, form) {
 
-                var idTurma = $("#turma_id").val();
-                if (idTurma === undefined) {
-                    $('#turmas_form')[0].reset();
-                    select2();
-                    setAlunos();
-                }
+                // var idTurma = $("#turma_id").val();
+                // if (idTurma === undefined) {
+                $('#testes_form')[0].reset();
+                // formRepeater();
+                //     select2();
+                //     setAlunos();
+                // }
 
                 KTApp.unblockPage();
 
@@ -124,17 +100,46 @@ var TurmasForm = function() {
         });
     }
 
+    var dateTimePicker = function() {
+        $('#data_inicio, #data_limite').datetimepicker({
+            todayHighlight: true,
+            autoclose: true,
+            pickerPosition: 'bottom-left',
+            format: 'yyyy-mm-dd hh:ii'
+        });
+    }
+
+    var formRepeater = function() {
+        $('#kt_repeater_3').repeater({
+            initEmpty: false,
+
+            defaultValues: {
+                'text-input': 'foo'
+            },
+
+            show: function() {
+                $(this).slideDown();
+            },
+
+            hide: function(deleteElement) {
+                if (confirm('Tem certeza que deseja excluir esta questão?')) {
+                    $(this).slideUp(deleteElement);
+                }
+            }
+        });
+    }
+
     return {
         // public functions
         init: function() {
-            onInstituicaoChange();
-            select2();
+            mask();
+            dateTimePicker();
+            formRepeater();
             validar();
-            setAlunos();
         }
     };
 }();
 
 jQuery(document).ready(function() {
-    TurmasForm.init();
+    TestesForm.init();
 });

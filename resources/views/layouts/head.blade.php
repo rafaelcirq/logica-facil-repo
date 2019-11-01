@@ -19,6 +19,13 @@
 
     {{-- jQuery --}}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{{ asset('js/blockUI.js') }}"></script>
+    <script src="assets/js/scripts.bundle.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        KTApp.blockPage();
+        console.log('começou - head.blade.php: 26');
+        // $.blockUI({ message: ' loading...' });
+    </script>
 
     <!--begin:: Vendor Plugins -->
     <link href="assets/plugins/general/perfect-scrollbar/css/perfect-scrollbar.css" rel="stylesheet" type="text/css" />
@@ -63,42 +70,6 @@
 
     <!--end:: Vendor Plugins -->
     <link href="assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
-
-    <!--begin:: Vendor Plugins for custom pages -->
-    {{-- <link href="assets/plugins/custom/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/custom/@fullcalendar/core/main.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/custom/@fullcalendar/daygrid/main.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/custom/@fullcalendar/list/main.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/custom/@fullcalendar/timegrid/main.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-autofill-bs4/css/autoFill.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-colreorder-bs4/css/colReorder.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-fixedcolumns-bs4/css/fixedColumns.bootstrap4.min.css"
-        rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4.min.css"
-        rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-keytable-bs4/css/keyTable.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-rowgroup-bs4/css/rowGroup.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-rowreorder-bs4/css/rowReorder.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-scroller-bs4/css/scroller.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/plugins/custom/datatables.net-select-bs4/css/select.bootstrap4.min.css" rel="stylesheet"
-        type="text/css" />
-    <link href="assets/plugins/custom/jstree/dist/themes/default/style.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/custom/jqvmap/dist/jqvmap.css" rel="stylesheet" type="text/css" />
-    <link href="assets/plugins/custom/uppy/dist/uppy.min.css" rel="stylesheet" type="text/css" /> --}}
-
-    <!--end:: Vendor Plugins for custom pages -->
 
     <!--end::Global Theme Styles -->
 

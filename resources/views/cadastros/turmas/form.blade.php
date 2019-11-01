@@ -1,6 +1,12 @@
 @csrf
 <div class="form-group row">
     <input hidden id="users_id" name="users_id" value="{{ Auth::id() }}">
+    @if(isset($turma))
+    <input value="{{ $turma->id }}" id="turma_id" hidden>
+    @foreach ($turma->alunos as $aluno)
+    <input value="true" hidden id="aluno_turma_{{ $aluno->id }}">
+    @endforeach
+    @endif
     <div class="col-lg-6 form-group-sub">
         <label class="form-control-label">
             Instituição:
@@ -8,17 +14,25 @@
         <select class="form-control kt-select2" id="instituicoes_id" name="instituicoes_id">
             <option value="">Nenhuma</option>
             @foreach ($instituicoes as $instituicao)
-            <option value="{{ $instituicao->id }}">@if(@isset($instituicao->sigla)){{ $instituicao->sigla }} -
-                @endif{{ $instituicao->nome }}</option>
+            <option value="{{ $instituicao->id }}"
+                @if(isset($turma) && $turma->instituicao->id == $instituicao->id)
+                selected
+                @endif
+                >
+                @if(@isset($instituicao->sigla))
+                {{ $instituicao->sigla }} -
+                @endif{{ $instituicao->nome }}
+            </option>
             @endforeach
         </select>
-        <label for="instituicoes_id" class="invalid-feedback error" generated="true">Defina a instituicao a qual a turma pertencerá.</label>
+        <label for="instituicoes_id" class="invalid-feedback error" generated="true">Defina a instituicao a qual a turma
+            pertencerá.</label>
     </div>
     <div class="col-lg-6 form-group-sub">
         <label class="form-control-label">
             Nome:
         </label>
-        <input class="form-control" id="nome" name="nome">
+        <input class="form-control" id="nome" name="nome" value="{{ isset($turma) ? $turma->nome : '' }}">
     </div>
 </div>
 <div class="form-group rouw">
