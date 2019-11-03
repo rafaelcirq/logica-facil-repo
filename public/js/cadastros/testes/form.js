@@ -100,12 +100,31 @@ var TestesForm = function() {
         });
     }
 
-    var dateTimePicker = function() {
-        $('#data_inicio, #data_limite').datetimepicker({
+    var dateTimePickerLimite = function(dataInicial) {
+        $('#data_limite').datetimepicker({
             todayHighlight: true,
             autoclose: true,
             pickerPosition: 'bottom-left',
-            format: 'yyyy-mm-dd hh:ii'
+            format: 'yyyy-mm-dd hh:ii',
+            startDate: dataInicial
+        });
+    }
+
+    var dateTimePickerInicial = function() {
+        $('#data_inicio').datetimepicker({
+            todayHighlight: true,
+            autoclose: true,
+            pickerPosition: 'bottom-left',
+            format: 'yyyy-mm-dd hh:ii',
+            startDate: new Date()
+        });
+    }
+
+    var dateTimePickerChange = function() {
+        $('#data_inicio').change(function() {
+            var data = $(this).val();
+            $('#data_limite').val('');
+            $('#data_limite').datetimepicker('setStartDate', data);
         });
     }
 
@@ -133,7 +152,9 @@ var TestesForm = function() {
         // public functions
         init: function() {
             mask();
-            dateTimePicker();
+            dateTimePickerInicial();
+            dateTimePickerLimite(new Date());
+            dateTimePickerChange();
             formRepeater();
             validar();
         }

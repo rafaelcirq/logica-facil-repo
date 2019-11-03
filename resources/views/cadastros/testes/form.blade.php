@@ -14,7 +14,7 @@
         <label class="form-control-label">
             Valor:
         </label>
-        <input class="form-control" id="valor" name="valor" placeholder="10.00" value="{{ isset($teste) ? $teste->valor : '' }}">
+        <input class="form-control" id="valor" name="valor" value="{{ isset($teste) ? $teste->valor : '' }}">
     </div>
     <div class="col-lg-3 form-group-sub">
         <label class="form-control-label">
@@ -59,7 +59,9 @@
                                 <label class="form-control-label">
                                     Pergunta:
                                 </label>
-                                <textarea class="form-control" rows="10" name="pergunta"></textarea>
+                                <textarea class="form-control" rows="10" name="pergunta" required></textarea>
+                                <label for="pergunta" class="invalid-feedback error" generated="true">Defina a pergunta
+                                    da questão.</label>
                             </div>
                             <div class="form-group row">
                                 <a href="javascript:;" data-repeater-delete="" class="btn btn-danger btn-icon">
@@ -71,6 +73,13 @@
                             {{-- <div class="form-group"> --}}
                             <div class="kt-radio-list">
                                 <div class="form-group row">
+                                    <div class="col-lg-12 form-group-sub">
+                                        <label class="form-control-label">
+                                            Alternativas (marque a correta):
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <div class="col-lg-1 form-group-sub" style="margin-top: 2%;">
                                         <label class="kt-radio">
                                             <input type="radio" value="1" name="alternativaCorreta">
@@ -78,7 +87,9 @@
                                         </label>
                                     </div>
                                     <div class="col-lg-11 form-group-sub">
-                                        <input class="form-control" name="alternativas[0]" value="">
+                                        <input class="form-control" required name="alternativas[0]" value="">
+                                        <label for="pergunta" class="invalid-feedback error" generated="true">Defina
+                                            todas as alternativas da questão.</label>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -89,7 +100,9 @@
                                         </label>
                                     </div>
                                     <div class="col-lg-11 form-group-sub">
-                                        <input class="form-control" name="alternativas[1]" value="">
+                                        <input class="form-control" required name="alternativas[1]" value="">
+                                        <label for="pergunta" class="invalid-feedback error" generated="true">Defina
+                                            todas as alternativas da questão.</label>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -100,7 +113,9 @@
                                         </label>
                                     </div>
                                     <div class="col-lg-11 form-group-sub">
-                                        <input class="form-control" name="alternativas[2]" value="">
+                                        <input class="form-control" required name="alternativas[2]" value="">
+                                        <label for="pergunta" class="invalid-feedback error" generated="true">Defina
+                                            todas as alternativas da questão.</label>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -111,7 +126,9 @@
                                         </label>
                                     </div>
                                     <div class="col-lg-11 form-group-sub">
-                                        <input class="form-control" name="alternativas[3]" value="">
+                                        <input class="form-control" required name="alternativas[3]" value="">
+                                        <label for="pergunta" class="invalid-feedback error" generated="true">Defina
+                                            todas as alternativas da questão.</label>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -122,7 +139,9 @@
                                         </label>
                                     </div>
                                     <div class="col-lg-11 form-group-sub">
-                                        <input class="form-control" name="alternativas[4]" value="">
+                                        <input class="form-control" required name="alternativas[4]" value="">
+                                        <label for="pergunta" class="invalid-feedback error" generated="true">Defina
+                                            todas as alternativas da questão.</label>
                                     </div>
                                 </div>
                             </div>
