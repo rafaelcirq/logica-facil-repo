@@ -12,9 +12,6 @@ var Informacoes = function() {
                 name: {
                     required: true,
                 },
-                tipo: {
-                    required: true,
-                },
                 email: {
                     required: true,
                     email: true
@@ -23,9 +20,6 @@ var Informacoes = function() {
             messages: {
                 "name": {
                     required: "Insira seu nome.",
-                },
-                "tipo": {
-                    required: "Diga se você é um professor ou um aluno",
                 },
                 "email": {
                     required: "Insira seu email.",
