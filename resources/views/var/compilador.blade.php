@@ -15,6 +15,7 @@
                     <button class="btn btn-secondary" type="button" id="compilar">Compilar</button>
                 </div>
             </div>
+            <span class="form-text text-muted">Verifique os comandos disponíveis na aba "Instruções".</span>
         </div>
         <div class="form-group row">
             

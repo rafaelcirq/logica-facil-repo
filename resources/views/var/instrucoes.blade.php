@@ -147,7 +147,7 @@
                             fill="#000000" fill-rule="nonzero" opacity="0.3"
                             transform="translate(9.000003, 11.999999) rotate(-270.000000) translate(-9.000003, -11.999999) " />
                     </g>
-                </svg> Compilando
+                </svg> Compilador
             </div>
         </div>
         <div id="bloco_5" class="collapse" aria-labelledby="headingTwo7" data-parent="#accordionExample7">

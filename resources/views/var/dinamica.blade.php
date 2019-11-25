@@ -27,7 +27,7 @@
     <div class="col-lg-2">
         <label>Nome:</label>
         <input disabled type="text" id="campoNome" class="form-control">
-        <span class="form-text text-muted">O nome escolhido deve atender as regras de nomeação de variável</span>
+        <span class="form-text text-muted">Verifique as regras de nomeação na aba "Instruções".</span>
     </div>
     <div class="col-lg-1">
         <button type="reset" id="setNome" style="margin-top: 40%;" class="btn btn-primary" disabled>Definir</button>
@@ -36,7 +36,7 @@
     <div class="col-lg-2">
         <label>Valor:</label>
         <input disabled type="text" id="campoValor" class="form-control">
-        <span class="form-text text-muted">O valor escolhido deve ser numérico de no máximo 4 dígitos</span>
+        <span class="form-text text-muted">Verifique as regras de atribuição de valor na aba "Instruções".</span>
     </div>
     <div class="col-lg-1">
         <button type="reset" id="setValor" style="margin-top: 40%;" class="btn btn-primary" disabled>Atribuir</button>
