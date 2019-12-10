@@ -130,8 +130,8 @@ var Dinamica = function() {
             nomeValido = false;
         }
 
-        // se tem mais de 30 caracteres
-        if (nome.length > 30) {
+        // se tem mais de 10 caracteres
+        if (nome.length > 10) {
             nomeValido = false;
         }
 

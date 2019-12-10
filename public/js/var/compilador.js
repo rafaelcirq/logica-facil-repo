@@ -97,6 +97,10 @@ var Compilador = function() {
         }
     }
 
+    var validarValor = function(valor) {
+        return !(!$.isNumeric(valor) || valor.length > 4);
+    }
+
     // atribuição
 
     var atribuir = function(comando) {
@@ -108,8 +112,10 @@ var Compilador = function() {
 
         if (envelopeExiste(envelope)) {
             conteudo = calcular(conteudo);
-            setValorByCompilador(envelope, conteudo);
-            return "OK!";
+            if (validarValor(conteudo)) {
+                setValorByCompilador(envelope, conteudo);
+                return "OK!";
+            }
         }
 
         return "ERRO!";
