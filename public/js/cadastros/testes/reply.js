@@ -19,6 +19,9 @@ var TestesReply = function() {
                 handleAjaxFormSubmit(form, formAction, formData);
             }
         });
+        $(".teste").rules("add", {
+            required: true
+        });
     }
 
     var handleAjaxFormSubmit = function(form, formAction, formData) {
@@ -67,6 +70,7 @@ var TestesReply = function() {
                         }
                     });
                 }
+                window.location = ("turmas/" + $("#turma_id").val());
             },
             error: function(xhr, desc, err) {
 

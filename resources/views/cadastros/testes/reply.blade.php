@@ -15,21 +15,27 @@ Responder
 
 @section('conteudo')
 {{ Form::open(['method' => 'POST', 'class' => 'kt-form', 'id' => "resultado_form", 'route' => ['resultados.store']]) }}
+
 <input name="testes_id" value="{{ $teste->id }}" hidden>
+<input id="turma_id" value="{{ $teste->turma->id }}" hidden>
+
 @foreach ($teste->perguntas as $pergunta)
 <div class="form-group row">
     <div class="col-lg-12 form-group-sub">
         <label class="form-control-label">
-            {{ $pergunta->texto }}
+            {{ $loop->iteration }}. {{ $pergunta->texto }}
         </label>
         <div class="kt-radio-list">
             @foreach($pergunta->alternativas as $alternativa)
             <label class="kt-radio">
-                <input type="radio" name="respostas[{{ $pergunta->id }}]" value="{{ $alternativa->id }}"> {{ $alternativa->texto }}
+                <input type="radio" class="teste" name="respostas[{{ $pergunta->id }}]" value="{{ $alternativa->id }}"> {{ $alternativa->texto }}
                 <span></span>
             </label>
             @endforeach
         </div>
+        {{-- @error('email') --}}
+        <label class="invalid-feedback error" generated="true">Escolha uma alternativa para esta pergunta.</label>
+        {{-- @enderror --}}
     </div>
 </div>
 @endforeach

@@ -20,7 +20,7 @@ Conceito de Variável
         <a class="nav-link active" data-toggle="tab" href="#kt_tabs_5_1" role="tab">Instruções</a>
     </li>
     <li class="nav-item">
-        <a class="nav-link" data-toggle="tab" href="#kt_tabs_5_2" role="tab">VAR</a>
+        <a class="nav-link" data-toggle="tab" href="#kt_tabs_5_2" role="tab">Dinâmica</a>
     </li>
     <li class="nav-item">
         <a class="nav-link" data-toggle="tab" href="#kt_tabs_5_3" role="tab">Compilador</a>
